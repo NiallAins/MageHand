@@ -23,6 +23,16 @@
     "last 2 versions"
   ],
   "vue": {
-    "publicPath": "/PocketSheet/dist/"
+    "publicPath": "/PocketSheet/dist/",
+    "pwa": {
+      "manifestOptions": {
+        "name": "PocketSheet",
+        "short_name": "PocketSheet",
+        "display": "fullscreen",
+        "orientation": "portrait",
+        "theme_color":"#222222",
+        "background_color": "#222222"
+      }
+    }
   }
 }

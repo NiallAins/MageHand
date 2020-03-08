@@ -1,14 +1,14 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "c6ad168441291ecc05d3",
-    "url": "/PocketSheet/dist/css/app.99663cc4.css"
+    "revision": "05172e9d54c86d45f0ae",
+    "url": "/PocketSheet/dist/css/app.e43f65ec.css"
   },
   {
-    "revision": "74b45d48e36837057e8a2b5839c1da43",
+    "revision": "92d1fec41d5d8bfd017ed0f8502b1586",
     "url": "/PocketSheet/dist/index.html"
   },
   {
-    "revision": "c6ad168441291ecc05d3",
+    "revision": "05172e9d54c86d45f0ae",
     "url": "/PocketSheet/dist/js/app.8aa3b441.js"
   },
   {
@@ -16,7 +16,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/PocketSheet/dist/js/chunk-vendors.605e19b9.js"
   },
   {
-    "revision": "eb3a85812326ceeb37bda37420aec90e",
+    "revision": "ec4cbadf40653b2af0e6dc223b39ca55",
     "url": "/PocketSheet/dist/manifest.json"
   },
   {
