@@ -1,0 +1,71 @@
+@import 'vars.scss';
+@import 'icons.scss';
+
+body {
+  min-width: $w-min;
+  max-width: $w-max;
+  overflow-x: hidden;
+  padding: 15px;
+  margin: 0 auto;
+  background-color: $c-bg;
+  overflow-x: none;
+  font-family: $f-prim;
+  font-size: $f-size-md;
+  line-height: $f-height-md;
+  color: $c-font;
+  
+  h1, h2, h3, h4, h4, h6 {
+    font-family: $f-head;
+    margin: 0;
+    line-height: 2;
+    font-weight: normal;
+    text-transform: capitalize;
+  }
+  
+  h3 {
+    font-size: 24px;
+  }
+  
+  ul, li {
+    padding: 3px 0;
+    margin: 0;
+    list-style: none;
+    
+    &.item-pad {
+      padding-top: 10px;
+    }
+    
+    span.l-case {
+      text-transform: lowercase;
+    }
+    
+    pre {
+      font-size: 14px;
+      line-height: 16px;
+    }
+  }
+  
+  input[type=text] {
+    padding: 0 8px;
+    border: 1px solid $c-border;
+    font-family: $f-prim;
+    color: $c-font;
+    font-size: $f-size-bg;
+    line-height: $f-height-bg;
+    background: $c-bg;
+    
+    &:focus {
+      outline-offset: -3px;
+    }
+  }
+
+  button {
+    color: $c-font;
+    background: none;
+  }
+
+  .float-parent {
+    clear: both;
+    overflow: auto;
+  }
+}
