@@ -29,7 +29,7 @@
             (userData.profSkills.includes(skill) ? userData.prof : 0) | addSign
           }}
         </div>
-        <div :class="{ 'title': true, 'small-text': skill === 'animal handling' }">
+        <div :class="{ 'title': true, 'small-text': skill === 'animal handling' || skill === 'slight of hand' }">
           {{ skill }}
         </div>
       </div>
@@ -109,6 +109,11 @@
   $c-prim: $c-stat;
   $c-sec: lighten($c-prim, 20%);
 
+  #page_stat {
+    @media (max-width: 390px) {
+      font-size: 15px;
+    }
+  }
 
   .stat-box {
     float: left;
@@ -185,13 +190,13 @@
 
         &.title {
           text-transform: capitalize;
-          padding-left: 20px;
+          padding-left: 14px;
           width: calc(100% - 55px);
           
           @media (max-width: 390px) {
             &.small-text {
               padding-top: 4px;
-              font-size: 13px;
+              font-size: 12px;
             }
           }
         }
