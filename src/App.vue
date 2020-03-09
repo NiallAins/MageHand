@@ -6,17 +6,21 @@
     <Comb v-if="currentView === 'comb'"></Comb>
     <Note v-if="currentView === 'note'"></Note>
 
-    <nav
-      :class="{ 'open': navOpen }"
-      @mousedown="navOpen = true"
-      @touchstart="navOpen = true"
-    >
+    <nav :class="{ 'open': navOpen }">
       <div
         v-for="(label, name) in navItems"
         :class="['nav-item', name]"
-        @click="currentView = name; navOpen = false;"
+        @mouseup="currentView = name; navOpen = false"
+        @touchend="currentView = name; navOpen = false; $event.preventDefault();"
       >
         <i :class="'icon-' + name"></i>
+      </div>
+      <div
+        class="menu-caret"
+        @mousedown="navOpen = !navOpen"
+        @touchstart="navOpen = !navOpen; $event.preventDefault();"
+      >
+        <i class="icon-menu-caret"></i>
       </div>
     </nav>
     <div
@@ -68,9 +72,15 @@
 
 <style lang="scss">
   @import 'global.scss';
-
+  
   $w-nav-item: 64px;
   $l-ani: 0.3s;
+
+  @keyframes pause-pointer-events {
+    0% { pointer-events: none; }
+    99% { pointer-events: none; }
+    100% { pointer-events: all; }
+  }
 
   nav {
     position: fixed;
@@ -83,10 +93,18 @@
     border-radius: 0 100% 0 0;
     line-height: $w-nav-item;
     text-align: center;
-    transition:
-      all $l-ani,
-      pointer-events 0s linear $l-ani;
-    
+    transition: all $l-ani;
+
+    .menu-caret {
+      position: absolute;
+      bottom: -7px;
+      left: -2px;
+      transition:
+        transform $l-ani,
+        bottom $l-ani,
+        left $l-ani;
+    }
+
     .nav-item {
       position: absolute;
       width: $w-nav-item;
@@ -95,7 +113,7 @@
       opacity: 0;
       pointer-events: none;
       overflow: hidden;
-      
+
       &:nth-child(1) {
         top: 15%;
         right: 73%;
@@ -116,21 +134,28 @@
         top: 70%;
         right: 44%;
       }
-
       &.prof { background: $c-prof; }
       &.stat { background: $c-stat; }
       &.sear { background: $c-sear; }
       &.comb { background: $c-comb; }
       &.note { background: $c-note; }
     }
-    
+
     &.open {
       width: 300px;
       height: 300px;
-      
+
+      .menu-caret {
+        bottom: 16px;
+        left: 20px;
+        transform: rotate(180deg);
+      }
+
       .nav-item {
         opacity: 1;
         pointer-events: all;
+        transition: opacity $l-ani;
+        animation: pause-pointer-events $l-ani 1;
       }
     }
   }
