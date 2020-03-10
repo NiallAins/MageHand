@@ -76,12 +76,12 @@
     }
 
     .i-container {
-      float: left;
-      width: 150px;
+      float: right;
+      width: 136px;
 
       i {
         float: right;
-        margin: -9px -8px;
+        margin: -10px;
       }
     }
 
