@@ -125,6 +125,10 @@
       &:nth-child(3) {
         top: 70%;
         right: 15%;
+
+        i:after {
+          color: $c-stat;
+        }
       }
       &:nth-child(4) {
         top: 43%;

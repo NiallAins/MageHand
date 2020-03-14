@@ -1,9 +1,17 @@
 <template>
   <div class="item-row">
     <i class="icon-more" @click="$emit('moreclick', item.index)"></i>
-    <h4> {{ item.index.replace(/-/g, ' ') }} </h4>
-    <p v-if="!editmode && (item.attack || item.ac || item.level)">
-      {{ item.attack }} {{ item.ac }} {{ item.level }}
+    <h4 :class="{
+      'sm-width': item.ac || item.attack,
+      'md-width': typeof item.level !== 'undefined'
+    }">
+      {{ item.index.replace(/-/g, ' ') }}
+    </h4>
+    <p v-if="!editmode && (item.attack || item.ac || typeof item.level !== 'undefined')">
+      {{ item.attack }}
+      {{ item.ac ? 'AC ' + item.ac : '' }}
+      {{ item.level === 0 ? 'Cantrip' : '' }}
+      {{ item.level > 0 ? 'Lvl '+ item.level : '' }}
       <span v-if="item.prof" class="prof-bonus"> +{{ prof }} </span>
     </p>
     <div class="i-container">
@@ -24,7 +32,7 @@
       ></i>
       <i
         :class="['icon-prep xs', { 'active': item.prep }]"
-        v-if="editmode && item.level"
+        v-if="editmode && typeof item.level === 'number'"
         @click="$emit('togglePrep', item.index)"
       ></i>
     </div>
@@ -60,7 +68,23 @@
       overflow: hidden;
       white-space: nowrap;
       text-overflow: ellipsis;
-      width: calc(50% - 25px);
+      width: 135px;
+    }
+
+    h4 {
+      width: calc(100% - 100px);
+
+      &.sm-width {
+        width: calc(100% - 185px);
+      }
+
+      &.md-width {
+        width: calc(100% - 140px);
+
+        &+p {
+          width: 90px;
+        }
+      }
     }
 
     p {
@@ -77,7 +101,6 @@
 
     .i-container {
       float: right;
-      width: 136px;
 
       i {
         float: right;

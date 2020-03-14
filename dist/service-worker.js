@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/PocketSheet/dist/precache-manifest.4da6780db499b3282e14e4d9c1546172.js"
+  "/PocketSheet/dist/precache-manifest.1891283569d5ec41c8a0b638e9c03d4a.js"
 );
 
 workbox.core.setCacheNameDetails({prefix: "dnder"});

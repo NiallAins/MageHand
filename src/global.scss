@@ -9,7 +9,6 @@ body {
   padding: 20px 8px;
   margin: 0 auto;
   background-color: $c-bg;
-  overflow-x: none;
   font-family: $f-prim;
   font-size: $f-size-md;
   line-height: $f-height-md;
@@ -63,10 +62,81 @@ body {
   button {
     color: $c-font;
     background: none;
+    font-family: $f-prim;
+
+    &:focus {
+      outline: none;
+    }
   }
 
   .float-parent {
     clear: both;
     overflow: auto;
+  }
+
+  textarea, .textbox {
+    position: relative;
+    padding: 8px;
+    width: 100%;
+    box-sizing: border-box;
+    display: block;
+    color: $c-font;
+    border: 1px solid $c-border;
+    resize: none;
+    font-size: $f-size-md;
+    font-family: $f-prim;
+    background: none;
+    
+    .input {
+      outline: none;
+    }
+    
+    .placeholder {
+      position: absolute;
+      left: 8px;
+      opacity: 0.4;
+      pointer-events: none;
+    }
+  }
+
+  .scroll-container {
+    position: relative;
+
+    .scroll-container-child {
+      padding: 20px 0;
+      overflow-y: auto;
+
+      &::-webkit-scrollbar {
+        width: 6px;
+      }
+      
+      &::-webkit-scrollbar-track {
+        background: none;
+      }
+      
+      &::-webkit-scrollbar-thumb {
+        background-color: $c-bg-light;
+        border-radius: 3px;
+      }
+    }
+
+    &:before,
+    &:after {
+      content: '';
+      position: absolute;
+      left: 0;
+      right: 0;
+      z-index: 5;
+      height: 40px;
+      pointer-events: none;
+    }
+    &:before {
+      top: 0;
+      background: linear-gradient(180deg, $c-bg, #0000);
+    }
+    &:after {
+      bottom: 0;
+      background: linear-gradient(0deg, $c-bg, #0000);
+    }
   }
 }

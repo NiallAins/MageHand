@@ -67,23 +67,55 @@
         <h3> {{ tab }} </h3>
       </div>
     </div>
-    <div
-      v-if="equipData[currentTab].length === 0"
-      class="missing-text"
-    >
-      You have no available {{ currentTab }}.
+    <div class="scroll-container">
+      <div :class="['scroll-container-child', { 'death-throws-open': userData.hp === 0 }]">
+        <div
+          v-if="equipData[currentTab].length === 0"
+          class="missing-text"
+        >
+          You have no available {{ currentTab }}.
+        </div>
+        <itemRow
+          v-for="item in equipData[currentTab]"
+          :item="item"
+          @moreclick="currentItem = $event"
+        ></itemRow>
+      </div>
     </div>
-    <itemRow
-      v-for="item in equipData[currentTab]"
-      :item="item"
-      @moreclick="currentItem = $event"
-    ></itemRow>
 
     <itemInfo
       :type="(currentTab === 'weapons' || currentTab === 'armour') ? 'equipment' : currentTab"
       :itemindex="currentItem"
       @close="currentItem = ''"
     ></itemInfo>
+
+    <div :class="['spell-slots', {'open': spellSlotsOpen}]">
+      <table>
+        <tr>
+          <td> Level </td>
+          <td colspan="4" class="text-left"> Available Slots </td>
+        </tr>
+        <tr v-for="(slot, level) in userData.spellSlots">
+          <td>{{ level + 1 }}</td>
+          <td v-for="i in [1, 2, 3, 4]">
+            <button
+              v-if="slot[0] >= i"
+              :class="{ 'slot': true, 'on': slot[1] >= i }"
+              @click="setSpellSlot(level, slot[1] < i)"
+            ></button>
+          </td>
+        </tr>
+      </table>
+    </div>
+
+    <div
+      :class="['spell-slots-toggle', {'open': spellSlotsOpen}]"
+      v-if="currentTab === 'spells'"
+    >
+      <button @click="spellSlotsOpen = !spellSlotsOpen">
+        {{ spellSlotsOpen ? 'Hide' : 'Show' }} Spell Slots
+      </button>
+    </div>
   </div>
 </template>
 
@@ -92,6 +124,7 @@
   import itemInfo from '../components/itemInfo';
   import itemRow from '../components/itemRow';
   import touchButton from '../components/touchButton';
+  import Vue from 'vue';
 
   export default {
     name: 'Comb',
@@ -106,6 +139,7 @@
         rollInit: 20,
         deathSaves: 0,
         deathFails: 0,
+        spellSlotsOpen: false,
         tabs: ['spells', 'features', 'weapons', 'armour'],
         currentTab: 'spells',
         equipData: { spells: [], features: [], weapons: [], armour: [] },
@@ -118,7 +152,7 @@
 
       this.equipData.spells = this.userData.spells.filter(s => s.prep);
       this.equipData.weapons = this.userData.equipment.filter(w => w.equip && w.attack);
-      this.equipData.feautes = this.userData.features;
+      this.equipData.features = this.userData.features;
       this.equipData.armour = this.userData.equipment.filter(a => a.equip && a.ac);
 
       this.ac = this.equipData.armour.reduce((tot, a) => tot += a.ac, 0);
@@ -132,6 +166,11 @@
         } else if (this.rollInit < 1) {
           this.rollInit += 20;
         }
+      },
+      setSpellSlot: function(level, increment) {
+        let newValue = this.userData.spellSlots[level][1] + (increment ? 1 : -1);
+        Vue.set(this.userData.spellSlots[level], 1, newValue);
+        UserData.set('spellSlots', this.userData.spellSlots);
       }
     },
   };
@@ -165,17 +204,17 @@
         position: absolute;
         z-index: 0;
         width: 56px;
-        height: 58px;
+        height: 56px;
         border: 1px solid $c-border;
         background: $c-bg;
       }
       &:before {
-        top: 11px;
+        top: 13px;
         left: -29px;
         transform: rotate(225deg);
       }
       &:after {
-        top: 11px;
+        top: 12px;
         right: -29px;
         transform: rotate(45deg);
       }
@@ -242,30 +281,83 @@
         &:first-child {
           text-align: right;
         }
-        
-        button {
-          display: inline-block;
-          padding: 10px;
-          border: 1px solid $c-border;
-          border-radius: 100%;
-          margin-left: 20px;
-          vertical-align: middle;
-          
-          &.succ.on {
-            background: $c-success;
-          }
-          &.fail.on {
-            background: $c-failure;
-          }
-          
-          &:focus {
-            outline: none;
-            border-width: 3px;
-            border-color: $c-prim;
-            margin-left: 18px;
-            margin-right: -2px;
-          }
+      }
+    }
+
+    .death-throws button,
+    .spell-slots button {
+      display: inline-block;
+      padding: 10px;
+      border: 1px solid $c-border;
+      border-radius: 100%;
+      margin-left: 20px;
+      vertical-align: middle;
+
+      &.succ.on {
+        background: $c-success;
+      }
+      &.fail.on {
+        background: $c-failure;
+      }
+      &.slot.on {
+        background: $c-prim;
+      }
+    }
+
+    .spell-slots {
+      position: fixed;
+      top: 100vh;
+      left: $w-pad;
+      right: $w-pad;
+      z-index: $z-modal - 1;
+      height: 100vh;
+      background: $c-bg;
+      border: 1px solid $c-border;
+      border-radius: 10px 10px 0 0;
+      transition:
+        top 0.3s,
+        z-index 0s linear 0.3s;
+
+      &.open {
+        top: 240px;
+        transition: top 0.3s;
+      }
+      
+      table {
+        margin: 15px auto;
+      }
+
+      td {
+        text-align: center;
+        width: 18%;
+        height: 30px; 
+
+        &.text-left {
+          text-align: left;
+          text-indent: 20px;
         }
+      }
+    }
+
+    .spell-slots-toggle {
+      position: absolute;
+      left: 0;
+      bottom: 20px;
+      z-index: $z-nav - 1;
+      width: 100%;
+      text-align: center;
+
+      &.open {
+        z-index: $z-modal - 1;
+      }
+
+      button {
+        width: 180px;
+        padding: 8px;
+        border: 1px solid $c-border;
+        border-radius: 10px;
+        background: $c-bg;
+        font-size: 16px;
       }
     }
 
@@ -303,10 +395,10 @@
           
           .touch-button {
             position: absolute;
-            bottom: -3px;
+            bottom: -1px;
             width: 40px;
             height: 40px;
-            text-align: center;
+            padding-top: 5px;
             background: none;
             border: none;
             
@@ -323,6 +415,7 @@
               display: inline-block;
               pointer-events: none;
               width: 33px;
+              height: 33px;
               line-height: 33px;
               color: $c-font;
               font-size: 20px;
@@ -362,7 +455,7 @@
     }
 
     .tabs {
-      margin: 20px 0 15px;
+      margin: 20px 0 10px;
 
       .tab-border {
         position: absolute;
@@ -393,6 +486,19 @@
           font-size: 15px;
           line-height: 40px;
         }
+      }
+    }
+    
+    .scroll-container-child {
+      height: calc(100vh - 410px);
+      transition: height 0.5s;
+
+      &.death-throws-open {
+        height: calc(100vh - 540px);
+      }
+
+      .item-row {
+        margin-right: 10px;
       }
     }
 

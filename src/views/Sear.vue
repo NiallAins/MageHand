@@ -45,18 +45,20 @@
       </div>
     </div>
 
-    <br/>
-
-    <itemRow
-      v-for="item in userData[listType]"
-      :item="item"
-      :editmode="true"
-      @moreclick="currentItem = $event"
-      @toggleProf="toggleParam($event, 'prof')"
-      @toggleEquip="toggleParam($event, 'equip')"
-      @togglePrep="toggleParam($event, 'prep')"
-      @removeItem="removeItem($event)"
-    ></itemRow>
+    <div class="scroll-container">
+      <div class="scroll-container-child">
+        <itemRow
+          v-for="item in userData[listType]"
+          :item="item"
+          :editmode="true"
+          @moreclick="currentItem = $event"
+          @toggleProf="toggleParam($event, 'prof')"
+          @toggleEquip="toggleParam($event, 'equip')"
+          @togglePrep="toggleParam($event, 'prep')"
+          @removeItem="removeItem($event)"
+        ></itemRow>
+      </div>
+    </div>
   
     <itemInfo
       :type="listType"
@@ -210,6 +212,15 @@
           background-color: $c-bg-light;
         }
       }
+    }
+  }
+
+  .scroll-container-child {
+    padding-bottom: 50px;
+    height: calc(100vh - 240px);
+
+    .item-row {
+      width: calc(100% + 10px);
     }
   }
 </style>

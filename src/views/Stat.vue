@@ -202,8 +202,8 @@
         }
 
         &.value {
-          width: 25px;
-          padding-right: 10px;
+          width: 20px;
+          padding-right: 8px;
           text-align: right;
         }
       }

@@ -75,7 +75,7 @@
               </span>
             </li>
             <li v-if="info.str_minimum"> Min Str {{ info.str_minimum }} </li>
-            <li v-if="info.stelth_disadvantage"> Stelth Disadvantage </li>
+            <li v-if="info.stelth_disadvantage"> Stealth Disadvantage </li>
           </div>
 
           <li v-if="info.speed"> Speed of {{ info.speed.quantity }} {{ info.speed.unit }} </li>
@@ -97,13 +97,18 @@
         <p v-for="para in info.desc" v-html="para"></p>
         <p v-for="para in info.higher_level" v-html="para"></p>
 
-        <span
+        <div
+          class="add-btn"
           v-if="addbutton && canAdd"
-          class="add"
-          @click="addItem(); $emit('close'); fadeIn = false"
         >
-          Add
-        </span>
+          <button @click="
+            addItem();
+            $emit('close');
+            fadeIn = false
+          ">
+            Add
+          </button>
+        </div>
       </div>
 
       <div v-if="!info">
@@ -180,7 +185,7 @@
           item.equip = false;
           item.prof = false;
           if (this.info.damage) {
-            item.attack = this.info.damage.damageType_dice + ' ' + this.info.damage.damage_type.name;
+            item.attack = this.info.damage.damage_dice + ' ' + this.info.damage.damage_type.name;
           }
           if (this.info.armor_class) {
             item.ac = this.info.armor_class.base;
@@ -198,8 +203,6 @@
 <style scoped lang="scss">
   @import '../vars.scss';
 
-  $w-mod-pad: 20px;
-
   .item-info {
     position: fixed;
     left: 0;
@@ -207,7 +210,7 @@
     top: 0;
     bottom: 0;
     z-index: -$z-modal;
-    padding: $w-mod-pad;
+    padding: $w-pad;
     background: #0007;
     opacity: 0;
     transition:
@@ -223,7 +226,7 @@
     
     .modal {
       overflow: auto;
-      height: calc(100vh - #{$w-mod-pad * 2} - 80px);
+      height: calc(100vh - #{$w-pad * 2} - 110px);
       min-width: $w-min - 60;
       max-width: $w-max;
       padding: 70px 10px 40px;
@@ -234,9 +237,9 @@
       
       h3 {
         position: fixed;
-        left: $w-mod-pad + 1;
-        right: $w-mod-pad + 1;
-        top: $w-mod-pad + 1;
+        left: $w-pad + 1;
+        right: $w-pad + 1;
+        top: $w-pad + 1;
         padding: 15px 45px 6px 9px;
         border-radius: 15px;
         line-height: 28px;
@@ -257,23 +260,28 @@
       z-index: 1;
       font-size: 30px;
       font-weight: bold;
-      padding: 50px 40px 5px 5px;
-    }
+      padding: 28px 28px 5px 5px;
+    } 
     
-    .add {
+    .add-btn {
       position: fixed;
-      bottom: $w-mod-pad + 10;
-      left: $w-mod-pad + 20;
-      right: $w-mod-pad + 20;
-      line-height: 35px;
-      border: 1px solid $c-border;
-      border-radius: 8px;
-      text-align: center;
-      font-size: 16px;
+      bottom: $w-pad - 1;
+      left: $w-pad + 1;
+      right: $w-pad + 10;
+      padding: 10px 0;
       background: $c-bg;
+      text-align: center;
       
-      &:active {
-        background: $c-border;
+      button {
+        width: 80%;
+        line-height: 35px;
+        border: 1px solid $c-border;
+        border-radius: 8px;
+        font-size: 16px;
+        
+        &:active {
+          background: $c-border;
+        }
       }
     }
   }

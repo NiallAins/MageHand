@@ -1,11 +1,17 @@
-const defaultUserData = '{"name":"Kevin Philips II","stats":[12,10,5,4,7,14],"savingThrow":[1,5],"profSkills":["animal handling","history","religion"],"prof":2,"speed":30,"hp":18,"maxHp":24,"level":3,"race":"half-orc","class":"cleric","align":"neutral good","info":"life domain","equipment":[{"index":"silvered sword","attack":"1d8 slashing","prof":true,"equip":true},{"index":"breast plate","ac":12,"prof":false,"equip":true}],"spells":[{"index":"Sacred Flame","level":"Cantrip","prep":true}],"features":[{"index":"Channel Divinty"}],"notes":[]}';
+const defaultUserData = '{"name":"","stats":[12,10,5,4,7,14],"savingThrow":[1,5],"spellSlots":[[3,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0]],"profSkills":["animal handling","history","religion"],"prof":2,"speed":30,"hp":10,"maxHp":10,"level":1,"race":"","class":"","subclass":"","align":"","desc":"","traits":"","equipment":[],"spells":[],"features":[],"notes":[]}';
 
 export default {
   data: {},
   permissionCheck: false,
 
   set: function(name, value) {
-    this.data[name] = value;
+    if (typeof name === 'object') {
+      for (let key in name) {
+        this.data[key] = name[key];
+      }
+    } else {
+      this.data[name] = value;
+    }
     this.saveData();
   },
 
@@ -17,6 +23,10 @@ export default {
       }
     } else {
       this.data[type].push(item);
+      this.data[type].sort((a, b) => a.index - b.index);
+      if (type === 'spells') {
+        this.data[type].sort((a, b) => a.level - b.level);
+      }
     }
     this.saveData();
   },
@@ -35,7 +45,7 @@ export default {
       this.data = JSON.parse(defaultUserData);
       this.saveData();
       console.log('No saved data, default data set');
-    } 
+    }
   },
 
   saveData: async function() {
