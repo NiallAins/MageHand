@@ -1,4 +1,4 @@
-# dnder
+# Mage Hand
 
 ## Project setup
 ```
