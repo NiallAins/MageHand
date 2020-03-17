@@ -29,7 +29,7 @@
       pressing: function(firstPress) {
         this.$emit('press');
         let cb = this.pressing.bind(this, false);
-        this.pressTimeout = setTimeout(cb, firstPress ? 500 : 250);
+        this.pressTimeout = setTimeout(cb, firstPress ? 500 : 200);
       },
       stopPress: function() {
         clearTimeout(this.pressTimeout);

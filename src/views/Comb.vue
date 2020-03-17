@@ -44,7 +44,7 @@
         <div class="init">
           <h4> Initiative Roll </h4>
           <h3> {{ rollInit }} </h3>
-          <span class="mod"> {{ baseInit + rollInit }} </span>
+          <span class="mod"> {{ baseInit | addSign }} </span>
           <touchButton @press="setRollInit(-1)"> - </touchButton>
           <touchButton @press="setRollInit(1)"> + </touchButton>
         </div>
@@ -173,6 +173,11 @@
         UserData.set('spellSlots', this.userData.spellSlots);
       }
     },
+    filters: {
+      addSign: function(num) {
+        return (num < 0 ? num.toString() : '+' + num);
+      }
+    }
   };
 </script>
 

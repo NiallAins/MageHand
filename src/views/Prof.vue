@@ -253,29 +253,17 @@
       min-height: 4em;
     }
 
-    .toggle-edit {
-      position: fixed;
-      bottom: 10px;
-      right: 15px;
-      height: 60px;
-      width: 60px;
-      padding: 0;
-      border-radius: 50%;
-      background-color: $c-bg;
-      border: 1px solid $c-border;
-
-      &.editing {
-        background: $c-prim;
-        border-color: $c-prim;
-      }
-    }
-
     input {
       text-overflow: ellipsis;
     }
 
     .dropdown input {  
       text-transform: capitalize;
+    }
+
+    .toggle-edit.editing {
+      background: $c-prim;
+      border-color: $c-prim;
     }
   }
 </style>

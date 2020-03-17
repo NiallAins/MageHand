@@ -13,9 +13,9 @@
       >
         <div class="note-header">
           <i
-            class="icon-caret"
-            @click="currentNote = (currentNote === i ? -1 : i)"
-          > ^ </i>
+            class="icon-expand"
+            @click="toggleNote(i)"
+          ></i>
           <input
             type="text"
             v-model="note.title"
@@ -71,6 +71,12 @@
         this.notes.splice(this.noteToDelete, 1);
         this.modalOpen = false;
         this.currentNote = -1;
+      },
+      toggleNote: function(noteNum) {
+        this.currentNote = (this.currentNote === noteNum ? -1 : noteNum);
+        if (this.currentNote === -1) {
+          UserData.set('notes', this.notes);
+        }
       }
     }
   };
@@ -91,11 +97,12 @@
     resize: none;
     font-size: $f-size-md;
     font-family: $f-prim;
-    
-    &:focus {
-      outline: 1px solid $c-prim;
-      outline-offset: -3px;
-    }
+  }
+
+  input:focus,
+  textarea:focus {
+    outline: 1px solid $c-prim;
+    outline-offset: -3px;
   }
 
   .page-container.openNote .note-container:not(.open) {
@@ -104,10 +111,11 @@
 
   .note-container.new-note {
     button {
+      padding: 0 20px;
       border: 1px solid $c-border;
       border-radius: 5px;
-      line-height: 40px;
-      padding: 0 20px;
+      margin-top: 5px;
+      line-height: 38px;
     }
   }
 
@@ -118,6 +126,12 @@
     
     &.open {
       height: calc(100vh - 20px);
+
+      i.icon-expand {
+        transform:
+          scale(0.75)
+          rotate(180deg);
+      }
     }
     
     .note-header {
@@ -135,13 +149,15 @@
 
       i {
         position: absolute;
-        top: 9px;
         
-        &.icon-caret {
+        &.icon-expand {
+          top: 7px;
           left: 4px;
+          transition: transform 0.2s;
         }
         
         &.icon-close {
+          top: 9px;
           right: 4px;
         }
       }
@@ -202,8 +218,9 @@
       }
       
       button {
-        border: 1px solid $c-border;
         padding: 10px 30px;
+        border: 1px solid $c-border;
+        border-radius: 5px;
         margin: 10px;
       }
     }

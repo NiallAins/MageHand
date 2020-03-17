@@ -48,7 +48,7 @@
     },
     data: function() {
       return {
-        currentView: 'stat',
+        currentView: 'prof',
         navOpen: false,
         navItems: {
           'prof': 'Profile',

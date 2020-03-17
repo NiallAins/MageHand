@@ -277,4 +277,16 @@ $thin: false;
       border-width: 3px 3px 0 0;
     }
   }
+
+  &.icon-expand {
+    &:before {
+      top: 25%;
+      bottom: 45%;
+      left: 35%;
+      right: 35%;
+      border: solid $c-icon;
+      border-width: 0 2px 2px 0;
+      transform: rotate(45deg);
+    }
+  }
 }
