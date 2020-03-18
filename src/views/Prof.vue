@@ -273,10 +273,18 @@
 
     input {
       text-overflow: ellipsis;
+
+      &:focus {
+        outline: 2px solid $c-prim;
+      }
     }
 
     .dropdown input {  
       text-transform: capitalize;
+
+      &:focus {
+        outline: 2px solid $c-prim;
+      }
     }
 
     .toggle-edit.editing {

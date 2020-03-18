@@ -27,8 +27,8 @@
     "pwa": {
       "manifestOptions": {
         "name": "Mage Hand",
-        "short_name": "MageHand",
-        "display": "standalone",
+        "short_name": "Mage Hand",
+        "display": "fullscreen",
         "orientation": "portrait",
         "theme_color": "#222222",
         "background_color": "#222222"

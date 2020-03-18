@@ -44,7 +44,7 @@
         <div class="init">
           <h4> Initiative Roll </h4>
           <h3> {{ rollInit }} </h3>
-          <span class="mod"> {{ baseInit | addSign }} </span>
+          <span class="mod" v-if="baseInit !== 0"> {{ baseInit | addSign }} </span>
           <touchButton @press="setRollInit(-1)"> - </touchButton>
           <touchButton @press="setRollInit(1)"> + </touchButton>
         </div>
