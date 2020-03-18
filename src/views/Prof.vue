@@ -3,13 +3,16 @@
     <div class="row">
       <input
         class="name"
+        placeholder="Character Name"
         type="text"
         v-model="userData.name"
-        :style="{ 'font-size': userData.name.length < 15 ? '26px' : (userData.name.length < 24 ? '20px' : '16px' ) }"
+        :style="{ 'font-size': userData.name.length < 15 ? '26px' : (userData.name.length < 24 ? '20px' : '16px') }"
       >
       <div class="level">
+        <touchButton v-if="editing" @press="editing && userData.level > 1 ? userData.level-- : ''"> - </touchButton>
+        <touchButton v-if="editing" @press="editing ? userData.level++ : ''"> + </touchButton>
         <h3>Lvl</h3>
-        <input type="number" v-model="userData.level">
+        <h2> {{ userData.level }} </h2>
       </div>
     </div>
     <div class="row type">
@@ -135,12 +138,14 @@
   import UserData from '../userData';
   import textbox from '../components/textbox';
   import dropdown from '../components/dropdown';
+  import touchButton from '../components/touchButton';
 
   export default {
     name: 'Prof',
     components: {
       textbox,
-      dropdown
+      dropdown,
+      touchButton
     },
     data: function() {
       return {
@@ -208,19 +213,32 @@
       
       h3 {
         font-size: 18px;
-        line-height: 20px;
-        color: $c-bg;
+        line-height: 26px;
+      } 
+
+      .touch-button {
+        position: absolute;
+        top: 25px;
+        border: 1px solid $c-font;
+        border-radius: 100%;
+        width: 30px;
+        line-height: 28px;
+        font-size: 20px;
+        font-family: $f-prim;
+        background: $c-prim;
+
+        &:nth-child(1) {
+          left: -9px;
+        }
+        &:nth-child(2) {
+          right: -9px;
+        }
       }
       
-      input {
-        width: 50px;
-        padding: 17px 0 0;
-        border: 1px solid $c-border;
-        margin: -25px 0 0 0;
-        text-align: center;
+      h2 {
         font-family: $f-head;
-        font-size: 30px;
-        background: none;
+        font-size: 20px;
+        line-height: 1.2;
       }
       
       &:before {
