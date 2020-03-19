@@ -16,8 +16,8 @@
           :class="['prof', { 'editing': editing, 'on': userData.savingThrow.includes(i) }]"
           @click="toggleProf(i, true)"
         >
-          <span v-if="editing" class="st"> Saving <br/> Throw Prof </span>
-          <span v-else> {{ userData.prof | addSign }} </span>
+          <span class="num"> {{ userData.prof | addSign }} </span>
+          <span class="st"> Saving <br/> Throw Prof </span>
         </span>
       </div>
     </div>
@@ -262,6 +262,11 @@
       
       h2, h3, h4 {
         line-height: 1.3;
+      }
+
+      h4 {
+        font-size: 15px;
+        transition: font-size $l-ani;
 
         &.font-lg {
           font-size: 20px;
@@ -291,14 +296,14 @@
         border: 1px solid $c-border;
         border-radius: 12px;
         text-align: center;
-        color: $c-bg;
         background: $c-bg;
         overflow: hidden;
         transition:
           width $l-ani,
           height $l-ani,
           opacity $l-ani,
-          bottom $l-ani;
+          bottom $l-ani,
+          border-radius $l-ani;
 
         &.editing {
           opacity: 1;
@@ -308,13 +313,25 @@
           padding-top: 2px;
           border-radius: 3px 12px 3px 3px;
           background: $c-bg;
+
+          .num {
+            color: transparent;
+          }
+
+          .st {
+            color: $c-font;
+          }
         }
 
         &.on {
           opacity: 1;
-          color: $c-font;
           border-color: $c-prim;
           background: $c-prim;
+        }
+
+        .num {
+          color: $c-font;
+          transition: color $l-ani;
         }
 
         .st {
@@ -322,9 +339,10 @@
           left: 0;
           width: 78px;
           font-size: 13px;
+          color: transparent;
           line-height: 13px;
-          color: $c-font;
           white-space: nowrap;
+          transition: color $l-ani;
         }
       }
     }
@@ -375,7 +393,7 @@
         &.value {
           width: 20px;
           line-height: 24px;
-          padding-right: 8px;
+          padding: 0 6px 0 2px;
           border: 1px solid $c-bg;
           border-radius: 100% 0 0 100%;
           margin-bottom: 3px;

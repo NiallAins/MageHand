@@ -186,7 +186,7 @@
 
   $c-prim: $c-comb;
   $c-success: $c-prim;
-  $c-failure: #800; 
+  $c-failure: $c-stat; 
 
   #page_comb {
     .hit-points {
@@ -311,20 +311,20 @@
 
     .spell-slots {
       position: fixed;
-      top: 100vh;
+      bottom: -100vh;
       left: $w-pad;
       right: $w-pad;
       z-index: $z-modal - 1;
-      height: 100vh;
+      height: 470px;
       background: $c-bg;
       border: 1px solid $c-border;
       border-radius: 10px 10px 0 0;
       transition:
-        top 0.3s,
+        bottom 0.3s,
         z-index 0s linear 0.3s;
 
       &.open {
-        top: 240px;
+        bottom: 0px;
         transition: top 0.3s;
       }
       
