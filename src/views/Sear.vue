@@ -135,7 +135,6 @@
   @import '../vars.scss';
 
   $c-prim: $c-sear;
-  $c-sec: lighten($c-prim, 20%);
 
   .tabs {
     position: absolute;
@@ -180,7 +179,7 @@
     }
 
     input[type=text]:focus {
-      outline: 1px solid $c-sec;
+      outline: 2px solid $c-prim;
     }
     
     .clear-search {

@@ -87,7 +87,7 @@
     bottom: 0;
     left: 0;
     z-index: $z-nav;
-    background: #333;
+    background: #444;
     width: $w-nav-item;
     height: $w-nav-item;
     border-radius: 0 100% 0 0;

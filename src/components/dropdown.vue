@@ -12,7 +12,7 @@
       :readonly="!custom || noCustom"
       :placeholder="placeholder"
       :class="{ 'focused': open }"
-      @click="open = true"
+      @click="open = true;"
       @input="$emit('input', value)"
     >
     <ul :class="{ 'options': true, 'open': open }">
@@ -21,7 +21,7 @@
         class="option-custom"
         @click="
           custom = true;
-          value = '';
+          $emit('input', '')
           $refs.inpEl.focus();
           open = false;
         "
@@ -31,10 +31,9 @@
       <li
         v-for="o in options"
         @click="
-          value = o;
           custom = false;
           open = false;
-          $emit('input', value);
+          $emit('input', o);
         "
       >
         {{ o }}
@@ -56,7 +55,8 @@
     data: function() {
       return {
         open: false,
-        custom: false
+        custom: false,
+        customValue: ''
       }
     }
   };

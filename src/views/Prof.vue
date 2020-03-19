@@ -3,7 +3,7 @@
     <div class="row">
       <input
         class="name"
-        placeholder="Character Name"
+        placeholder="Character Name..."
         type="text"
         v-model="userData.name"
         :style="{ 'font-size': userData.name.length < 15 ? '26px' : (userData.name.length < 24 ? '20px' : '16px') }"
