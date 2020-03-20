@@ -74,7 +74,11 @@
     },
     methods: {
       showPrompt: function() {
-        Vue.deferredPrompt.prompt();
+        if (Vue.deferredPrompt) {
+          Vue.deferredPrompt.prompt();
+        } else {
+          console.error('No browser install prompt available');
+        }
       }
     }
   };
@@ -92,7 +96,7 @@
     }
   }
 
-  @media (min-width: $w-max), (not (display-mode: browser)) {
+  @media (min-width: $w-max), (display-mode: standalone), (display-mode: fullscreen) {
     .install-prompt {
       display: none;
     }
