@@ -1,45 +1,55 @@
 <template>
   <div>
-    <Prof v-if="currentView === 'prof'"></Prof>
-    <Stat v-if="currentView === 'stat'"></Stat>
-    <Sear v-if="currentView === 'sear'"></Sear>
-    <Comb v-if="currentView === 'comb'"></Comb>
-    <Note v-if="currentView === 'note'"></Note>
+    <div class="install-prompt">
+      <h1> Mage Hand </h1>
+      <img src="./assets/icon-image.png" />
+      Mage Hand is designed to run as a native app on mobile
+      <br/>
+      <button @click="showPrompt()"> Install Mage Hand </button>
+    </div>
+    <main>
+      <Prof v-if="currentView === 'prof'"></Prof>
+      <Stat v-if="currentView === 'stat'"></Stat>
+      <Sear v-if="currentView === 'sear'"></Sear>
+      <Comb v-if="currentView === 'comb'"></Comb>
+      <Note v-if="currentView === 'note'"></Note>
 
-    <nav :class="{ 'open': navOpen }">
+      <nav :class="{ 'open': navOpen }">
+        <div
+          v-for="(label, name) in navItems"
+          :class="['nav-item', name]"
+          @mouseup="currentView = name; navOpen = false"
+          @touchend="currentView = name; navOpen = false; $event.preventDefault();"
+        >
+          <i :class="'icon-' + name"></i>
+        </div>
+        <div
+          class="menu-caret"
+          @mousedown="navOpen = !navOpen"
+          @touchstart="navOpen = !navOpen; $event.preventDefault();"
+        >
+          <i class="icon-menu-caret"></i>
+        </div>
+      </nav>
       <div
-        v-for="(label, name) in navItems"
-        :class="['nav-item', name]"
-        @mouseup="currentView = name; navOpen = false"
-        @touchend="currentView = name; navOpen = false; $event.preventDefault();"
-      >
-        <i :class="'icon-' + name"></i>
-      </div>
-      <div
-        class="menu-caret"
-        @mousedown="navOpen = !navOpen"
-        @touchstart="navOpen = !navOpen; $event.preventDefault();"
-      >
-        <i class="icon-menu-caret"></i>
-      </div>
-    </nav>
-    <div
-      :class="{
-        'nav-bg': true,
-        'open': navOpen,
-      }"
-      @click="navOpen = false"
-    ></div>
+        :class="{
+          'nav-bg': true,
+          'open': navOpen,
+        }"
+        @click="navOpen = false"
+      ></div>
+    </main>
   </div>
 </template>
 
 <script>
+  import Vue from 'vue';
+  import UserData from './userData';
   import Prof from './views/Prof';
   import Stat from './views/Stat';
   import Sear from './views/Sear';
   import Comb from './views/Comb';
   import Note from './views/Note';
-  import UserData from './userData';
 
   export default {
     name: 'app',
@@ -63,8 +73,8 @@
       UserData.loadData();
     },
     methods: {
-      getIcon: function(icon) {
-        return require.context('./assets/', false, /\.png$/)('./icon_' + icon + '.png');
+      showPrompt: function() {
+        Vue.deferredPrompt.prompt();
       }
     }
   };
@@ -75,6 +85,40 @@
   
   $w-nav-item: 64px;
   $l-ani: 0.3s;
+
+  @media (max-width: $w-max) and (display-mode: browser) {
+    main {
+      display: none;
+    }
+  }
+
+  @media (min-width: $w-max), (not (display-mode: browser)) {
+    .install-prompt {
+      display: none;
+    }
+  }
+
+  .install-prompt {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-125px, -55%);
+    width: 250px;
+    text-align: center;
+
+    img {
+      display: block;
+      margin: 0 auto 10px;
+    }
+
+    button {
+      border: 1px solid $c-border;
+      border-radius: 5px;
+      padding: 10px 20px;
+      margin-top: 30px;
+      font-size: 20px;
+    }
+  }
 
   @keyframes pause-pointer-events {
     0% { pointer-events: none; }
