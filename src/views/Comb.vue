@@ -263,7 +263,7 @@
       padding: 0 0 0 12px;
       margin: 0;
       border: 1px solid $c-border;
-      border-radius: 10px 0;
+      border-radius: $br-el 0;
       margin: 0 auto;
       opacity: 0;
       transition: all 0.5s;
@@ -379,7 +379,7 @@
         height: 80px;
         padding-top: 8px;
         border: 1px solid $c-border;
-        border-radius: 4px;
+        border-radius: $br-el;
         
         @media (max-width: 360px) {
           width: 65px;
@@ -396,7 +396,7 @@
         &.init {
           position: relative;
           width: 104px;
-          border-radius: 5px 5px 20px 20px;
+          border-radius: $br-el $br-el 20px 20px;
           
           .touch-button {
             position: absolute;
@@ -475,7 +475,7 @@
         width: calc(25% - 2px);
         float: left;
         border: 1px solid $c-border;
-        border-radius: 8px 8px 0 0;
+        border-radius: $br-el $br-el 0 0;
         margin: 0 -1px -1px 0;
         text-indent: 10%;
         background: #111;

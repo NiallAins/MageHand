@@ -113,7 +113,7 @@
     button {
       padding: 0 20px;
       border: 1px solid $c-border;
-      border-radius: 5px;
+      border-radius: $br-el;
       margin-top: 5px;
       line-height: 38px;
     }
@@ -169,7 +169,7 @@
       padding: 16px;
       border: 1px solid $c-border;
       border-width: 0px;
-      border-radius: 0 0 5px 5px;
+      border-radius: 0 0 $br-el $br-el;
       transition:
         height 0.3s,
         border-width 0s linear 0.3s;
@@ -209,7 +209,7 @@
       width: 290px;
       padding: 20px 0px;
       border: 1px solid $c-border;
-      border-radius: 8px 0;
+      border-radius: $br-mod 0;
       text-align: center;
       background: $c-bg;
       
@@ -220,7 +220,7 @@
       button {
         padding: 10px 30px;
         border: 1px solid $c-border;
-        border-radius: 5px;
+        border-radius: $br-el;
         margin: 10px;
       }
     }
@@ -230,7 +230,7 @@
       z-index: 10;
       width: 100%;
       height: 100%;
-      background: #0008;
+      background: $c-mod-bg;
     }
   }
 </style>

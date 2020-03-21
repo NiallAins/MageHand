@@ -1,0 +1,12 @@
+- Fixed scroll overlays on itemInfo
+- Consider desktop nav
+- Spell slots
+  - Width on desktop
+  - Editable
+  - Variable height
+- Search autocomplete bug fix
+- Item Info
+  - API item bug fix (Channel Divinity)
+  - Fixed scroll overlays
+  - Item pack support
+  - Custom items

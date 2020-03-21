@@ -9,93 +9,96 @@
     }"
   >
     <div class="modal">
-      <span
-        class="close"
-        @click="$emit('close'); fadeIn = false"
-      >
-        ×
-      </span>
-
       <div v-if="info">
-        <h3> {{ info.name }} </h3>
+        <h3>
+          {{ info.name }}
+          <i
+            class="icon-close"
+            @click="$emit('close'); fadeIn = false"
+          ></i>
+        </h3>
 
-        <ul v-if="type === 'spells'">
-          <li>
-            {{ info.level === 0 ? 'Cantrip of' : 'Level ' + info.level }}
-            {{ info.school.name }}
-          </li>
-          <li> Uses {{ info.components.map(c => spellComponents[c]).join(', ') }} </li>
-          <li v-if="info.range === 'Self'"> Affects self </li>
-          <li v-else> Range of <span class="l-case">{{ info.range }}</span> </li>
-          <li>
-            Takes <span class="l-case">{{ info.casting_time }}</span>,
-            <span v-if="info.duration === 'Instantaneous'"> affects instantaneously </span>
-            <span v-else class="l-case"> lasts {{ info.duration }} </span>
-          </li>
-          <li v-if="info.ritual"> Ritual </li>
-          <li v-if="info.concentration"> Concentration </li>
-          <li v-if="info.material"> Requires <span class="l-case">{{ info.material }}</span> </li>
-        </ul>
+        <div class="scroll-container">
+          <div class="scroll-container-child">
+            <ul v-if="type === 'spells'">
+              <li>
+                {{ info.level === 0 ? 'Cantrip of' : 'Level ' + info.level }}
+                {{ info.school.name }}
+              </li>
+              <li> Uses {{ info.components.map(c => spellComponents[c]).join(', ') }} </li>
+              <li v-if="info.range === 'Self'"> Affects self </li>
+              <li v-else> Range of <span class="l-case">{{ info.range }}</span> </li>
+              <li>
+                Takes <span class="l-case">{{ info.casting_time }}</span>,
+                <span v-if="info.duration === 'Instantaneous'"> affects instantaneously </span>
+                <span v-else class="l-case"> lasts {{ info.duration }} </span>
+              </li>
+              <li v-if="info.ritual"> Ritual </li>
+              <li v-if="info.concentration"> Concentration </li>
+              <li v-if="info.material"> Requires <span class="l-case">{{ info.material }}</span> </li>
+            </ul>
 
-        <ul v-if="type === 'equipment'">
-          <li>
-            {{ info[equipCategories[info.equipment_category]] }}
-            <span v-if="info.equipment_category === 'Armor'">
-              Armor
-            </span>
-            <span v-if="info.equipment_category === 'Weapon'">
-              {{ info.weapon_range }} Weapon
-            </span>
-          </li>
+            <ul v-if="type === 'equipment'">
+              <li>
+                {{ info[equipCategories[info.equipment_category]] }}
+                <span v-if="info.equipment_category === 'Armor'">
+                  Armor
+                </span>
+                <span v-if="info.equipment_category === 'Weapon'">
+                  {{ info.weapon_range }} Weapon
+                </span>
+              </li>
 
-          <div v-if="info.equipment_category === 'Weapon'">
-            <li>
-              {{ info.damage.damage_dice }} {{ info.damage.damage_type.name }}
-            </li>
-            <li>
-              Range of
-              {{ info.range.normal }}
-              ft{{ info.range.long ? ', ' + info.range.long + ' ft long' : '' }}
-            </li>
-            <li v-if="info.throw_range">
-              Throws
-              {{ info.throw_range.normal }}
-              ft{{ info.throw_range.long ? ', ' + info.throw_range.long + ' ft long' : '' }}
-            </li>
-            <li v-if="info.properties.length > 0">
-              {{ info.properties.map(i => i.name).join(', ') }}
-            </li>
+              <div v-if="info.equipment_category === 'Weapon'">
+                <li>
+                  {{ info.damage.damage_dice }} {{ info.damage.damage_type.name }}
+                </li>
+                <li>
+                  Range of
+                  {{ info.range.normal }}
+                  ft{{ info.range.long ? ', ' + info.range.long + ' ft long' : '' }}
+                </li>
+                <li v-if="info.throw_range">
+                  Throws
+                  {{ info.throw_range.normal }}
+                  ft{{ info.throw_range.long ? ', ' + info.throw_range.long + ' ft long' : '' }}
+                </li>
+                <li v-if="info.properties.length > 0">
+                  {{ info.properties.map(i => i.name).join(', ') }}
+                </li>
+              </div>
+
+              <div v-if="info.equipment_category === 'Armor'">
+                <li>
+                  AC {{ info.armor_class.base }}{{ info.armor_class.dex_bonus ? ' + Dex' : '' }}
+                  <span v-if="info.armor_class.max_bonus">
+                    (max bonus {{ info.armor_class.max_bonus }})
+                  </span>
+                </li>
+                <li v-if="info.str_minimum"> Min Str {{ info.str_minimum }} </li>
+                <li v-if="info.stelth_disadvantage"> Stealth Disadvantage </li>
+              </div>
+
+              <li v-if="info.speed"> Speed of {{ info.speed.quantity }} {{ info.speed.unit }} </li>
+              <li v-if="info.capacity"> {{ info.capacity }} capacity</li>
+
+              <li class="item-pad"> 
+                <span v-if="info.weight"> {{ info.weight }} lb,</span>
+                <span v-if="info.cost">
+                  {{ info.cost.quantity }}
+                  {{ costUnits[info.cost.unit] || info.cost.unit }}
+                </span>
+              </li>
+            </ul>
+
+            <ul v-if="type === 'features'">
+              <li> Level {{ info.level }} {{ info.class.name }} </li>
+            </ul>
+
+            <p v-for="para in info.desc" v-html="para"></p>
+            <p v-for="para in info.higher_level" v-html="para"></p>
           </div>
-
-          <div v-if="info.equipment_category === 'Armor'">
-            <li>
-              AC {{ info.armor_class.base }}{{ info.armor_class.dex_bonus ? ' + Dex' : '' }}
-              <span v-if="info.armor_class.max_bonus">
-                (max bonus {{ info.armor_class.max_bonus }})
-              </span>
-            </li>
-            <li v-if="info.str_minimum"> Min Str {{ info.str_minimum }} </li>
-            <li v-if="info.stelth_disadvantage"> Stealth Disadvantage </li>
-          </div>
-
-          <li v-if="info.speed"> Speed of {{ info.speed.quantity }} {{ info.speed.unit }} </li>
-          <li v-if="info.capacity"> {{ info.capacity }} capacity</li>
-
-          <li class="item-pad"> 
-            <span v-if="info.weight"> {{ info.weight }} lb,</span>
-            <span v-if="info.cost">
-              {{ info.cost.quantity }}
-              {{ costUnits[info.cost.unit] || info.cost.unit }}
-            </span>
-          </li>
-        </ul>
-
-        <ul v-if="type === 'features'">
-          <li> Level {{ info.level }} {{ info.class.name }} </li>
-        </ul>
-
-        <p v-for="para in info.desc" v-html="para"></p>
-        <p v-for="para in info.higher_level" v-html="para"></p>
+        </div>
 
         <div
           class="add-btn"
@@ -211,7 +214,7 @@
     bottom: 0;
     z-index: -$z-modal;
     padding: $w-pad;
-    background: #0007;
+    background: $c-mod-bg;
     opacity: 0;
     transition:
       opacity 0.4s,
@@ -225,25 +228,48 @@
     }
     
     .modal {
+      position: relative;
       overflow: auto;
       height: calc(100vh - #{$w-pad * 2} - 110px);
       min-width: $w-min - 60;
       max-width: $w-max;
       padding: 70px 10px 40px;
       border: 1px solid $c-border;
-      border-radius: 15px 0;
+      border-radius: $br-mod 0;
       margin: 0 auto;
       background: $c-bg;
       
       h3 {
-        position: fixed;
-        left: $w-pad + 1;
-        right: $w-pad + 1;
-        top: $w-pad + 1;
+        position: absolute;
+        left: 0px;
+        right: 0px;
+        top: 1px; 
         padding: 15px 45px 6px 9px;
-        border-radius: 15px;
+        border-radius: $br-mod;
         line-height: 28px;
         background: $c-bg;
+
+        .icon-close {
+          position: absolute;
+          top: 0px;
+          right: 0px;
+          z-index: 1;
+          font-size: 30px;
+          font-weight: bold;
+        } 
+      }
+
+      .scroll-container {
+        position: absolute;
+        top: 50px;
+        bottom: 50px;
+        left: $w-pad;
+        right: $w-pad;
+
+        .scroll-container-child {
+          height: 100%;
+          margin-right: 2px;
+        }
       }
     }
     
@@ -253,21 +279,11 @@
       top: 100px;
     }
     
-    .close {
-      position: fixed;
-      top: 0px;
-      right: 0px;
-      z-index: 1;
-      font-size: 30px;
-      font-weight: bold;
-      padding: 28px 28px 5px 5px;
-    } 
-    
     .add-btn {
-      position: fixed;
-      bottom: $w-pad - 1;
-      left: $w-pad + 1;
-      right: $w-pad + 10;
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
       padding: 10px 0;
       background: $c-bg;
       text-align: center;
@@ -276,7 +292,7 @@
         width: 80%;
         line-height: 35px;
         border: 1px solid $c-border;
-        border-radius: 8px;
+        border-radius: $br-el;
         font-size: 16px;
         
         &:active {

@@ -116,13 +116,13 @@
       ></dropdown>
     </div>
     <textbox
-      v-model="userData.traits"
-      placeholder="Traits, skills & languages..."
+      v-model="userData.desc"
+      placeholder="Character description..."
       :readonly="!editing"
     ></textbox>
     <textbox
-      v-model="userData.desc"
-      placeholder="Character description..."
+      v-model="userData.traits"
+      placeholder="Traits, skills & languages..."
       :readonly="!editing"
     ></textbox>
     <button
@@ -249,7 +249,7 @@
         top: 5px;
         bottom: 5px;
         z-index: -1;
-        border-radius: 5px;
+        border-radius: $br-el;
         background: $c-prim;
         transform: rotate(45deg);
       }

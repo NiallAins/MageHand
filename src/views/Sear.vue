@@ -152,7 +152,7 @@
         width: calc(33% - 2px);
         float: left;
         border: 1px solid $c-border;
-        border-radius: 8px 8px 0 0;
+        border-radius: $br-el $br-el 0 0;
         margin: 0 -1px -1px 0;
         text-indent: 10%;
         background: #111;

@@ -257,7 +257,7 @@
       height: 60px;
       padding-top: 6px;
       border: 1px solid $c-border;
-      border-radius: 4px;
+      border-radius: $br-el;
       text-align: center;
       
       h2, h3, h4 {
@@ -294,7 +294,7 @@
         width: 23px;
         height: 23px;
         border: 1px solid $c-border;
-        border-radius: 12px;
+        border-radius: 100%;
         text-align: center;
         background: $c-bg;
         overflow: hidden;
@@ -311,7 +311,7 @@
           width: 78px;
           height: 27px;
           padding-top: 2px;
-          border-radius: 3px 12px 3px 3px;
+          border-radius: $br-el 12px $br-el $br-el;
           background: $c-bg;
 
           .num {

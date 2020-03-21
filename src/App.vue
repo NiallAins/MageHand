@@ -3,7 +3,7 @@
     <div class="install-prompt">
       <h1> Mage Hand </h1>
       <img src="./assets/icon-image.png" />
-      Mage Hand is designed to run as a native app on mobile
+      Mage Hand is designed to run as a native app on mobile, click below to install
       <br/>
       <button @click="showPrompt()"> Install Mage Hand </button>
     </div>
@@ -13,6 +13,56 @@
       <Sear v-if="currentView === 'sear'"></Sear>
       <Comb v-if="currentView === 'comb'"></Comb>
       <Note v-if="currentView === 'note'"></Note>
+
+      <section class="modal-help" v-if="showHelp">
+        <div class="modal-bg" @click="showHelp = false"></div>
+        <div class="modal-container">
+          <button>
+            <i class="icon-close" @click="showHelp = false"></i>
+          </button>
+          <header>
+            <h1> Mage Hand </h1>
+            <p>
+              D&D 5e character sheet and stat tracker
+            </p>
+          </header>
+          <table>
+            <tr @click="showHelp = false; currentView = 'prof'">
+              <td><i class="icon-prof"></i></td>
+              <td>
+                <h3> Profile </h3>
+                <p> Add charcter details and description </p>
+              </td>
+            </tr>
+            <tr @click="showHelp = false; currentView = 'sear'">
+              <td><i class="icon-sear"></i></td>
+              <td>
+                <h3> Search </h3>
+                <p> Add, prepare and equip items and spells </p>
+              </td>
+            </tr>
+            <tr @click="showHelp = false; currentView = 'comb'">
+              <td><i class="icon-comb"></i></td>
+              <td>
+                <h3> Combat </h3>
+                <p> Track stats, spells and health for combat </p>
+              </td>
+            </tr>
+            <tr @click="showHelp = false; currentView = 'stat'">
+              <td><i class="icon-stat"></i></td>
+              <td>
+                <h3> Stats </h3>
+                <p> Track character stats, skills and proficiencies </p>
+              </td>
+            </tr>
+            <tr @click="showHelp = false; currentView = 'note'">
+              <td><i class="icon-note"></i></td>
+              <td> <h3>Notes</h3> </td>
+            </tr>
+          </table>
+          <p><a href="https://github.com/NiallAins/MageHand"> View project details... </a></p>
+        </div>
+      </section>
 
       <nav :class="{ 'open': navOpen }">
         <div
@@ -30,6 +80,10 @@
         >
           <i class="icon-menu-caret"></i>
         </div>
+        <div
+          class="help-icon"
+          @click="showHelp = true; navOpen = false;"
+        > ? </div>
       </nav>
       <div
         :class="{
@@ -59,6 +113,7 @@
     data: function() {
       return {
         currentView: 'prof',
+        showHelp: true,
         navOpen: false,
         navItems: {
           'prof': 'Profile',
@@ -90,17 +145,17 @@
   $w-nav-item: 64px;
   $l-ani: 0.3s;
 
-  @media (max-width: $w-max) and (display-mode: browser) {
-    main {
-      display: none;
-    }
-  }
+  // @media (max-width: $w-max) and (display-mode: browser) {
+  //   main {
+  //     display: none;
+  //   }
+  // }
 
-  @media (min-width: $w-max), (display-mode: standalone), (display-mode: fullscreen) {
+  //@media (min-width: $w-max), (display-mode: standalone), (display-mode: fullscreen) {
     .install-prompt {
       display: none;
     }
-  }
+  //}
 
   .install-prompt {
     position: fixed;
@@ -117,10 +172,108 @@
 
     button {
       border: 1px solid $c-border;
-      border-radius: 5px;
+      border-radius: $br-el;
       padding: 10px 20px;
       margin-top: 30px;
       font-size: 20px;
+    }
+  }
+
+  .modal-help {
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    z-index: $z-modal;
+    padding: $w-pad;
+
+    .modal-bg {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: $c-mod-bg;
+    }
+    
+    .modal-container {
+      position: relative;
+      width: calc(100% - 30px);
+      max-width: #{$w-max - 30px - (2 * ($w-pad + 1))};
+      height: calc(100vh - #{30px + (2 * ($w-pad + 1))});
+      padding: 15px;
+      border: 1px solid $c-border;
+      border-radius: $br-mod 0;
+      margin: 0 auto;
+      background: $c-bg;
+    }
+    
+    button {
+      position: absolute;
+      right: 0px;
+      top: 0px;
+      width: 50px;
+      height: 50px;
+      padding: 0;
+      border: none;
+      text-align: left;
+    }
+
+    header {
+      padding: 20px 0 10px;
+
+      h1, p {
+        text-align: center;
+        line-height: 1.2;
+        padding-bottom: 5px;
+      }
+    }
+
+    a {
+      position: absolute;
+      bottom: 20px;
+      left: 0;
+      right: 0;
+      text-align: center;
+      width: 100%;
+      text-decoration: none;
+      color: $c-font;
+      font-size: 14px;
+    }
+
+    tr:nth-child(1) i {
+      background-color: $c-prof;
+    }
+    tr:nth-child(2) i {
+      background-color: $c-sear;
+    }
+    tr:nth-child(3) i {
+      background-color: $c-comb;
+    }
+    tr:nth-child(4) i {
+      background-color: $c-stat;
+
+      &:after {
+        color: $c-stat; 
+      }
+    }
+    tr:nth-child(5) i {
+      background-color: $c-note;
+    }
+
+    td {
+      padding: 10px;
+    }
+
+    h3 {
+      font-size: 20px;
+      line-height: 1.5;
+    }
+
+    p {
+      margin: 0;
+      line-height: 1.3;
     }
   }
 
@@ -141,7 +294,13 @@
     border-radius: 0 100% 0 0;
     line-height: $w-nav-item;
     text-align: center;
-    transition: all $l-ani;
+    transition:
+      width $l-ani,
+      height $l-ani;
+
+    @media (min-width: $w-max) {
+      left: calc(50vw - #{$w-max / 2});
+    }
 
     .menu-caret {
       position: absolute;
@@ -151,6 +310,23 @@
         transform $l-ani,
         bottom $l-ani,
         left $l-ani;
+    }
+
+    .help-icon {
+      position: absolute;
+      top: 0;
+      left: 18px;
+      width: 64px;
+      height: 64px;
+      border-radius: 100%;
+      font-size: 28px;
+      font-family: $f-head;
+      text-align: center;
+      line-height: 64px;
+      background: #444;
+      pointer-events: none;
+      opacity: 0;
+      user-select: none;
     }
 
     .nav-item {
@@ -209,6 +385,16 @@
         transition: opacity $l-ani;
         animation: pause-pointer-events $l-ani 1;
       }
+
+      .help-icon {
+        top: -75px;
+        opacity: 0.6;
+        pointer-events: all;
+        transition:
+          top $l-ani,
+          opacity $l-ani;
+        animation: pause-pointer-events $l-ani 1;
+      }
     }
   }
 
@@ -219,7 +405,7 @@
     top: 100vh;
     bottom: 0;
     z-index: $z-nav - 1;
-    background: #0008;
+    background: $c-mod-bg;
     opacity: 0;
     transition: opacity $l-ani;
 

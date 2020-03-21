@@ -70,14 +70,19 @@ body {
 
     &.toggle-edit {
       position: fixed;
+      right: calc(50vw - #{($w-max / 2) - 10px});
       bottom: 10px;
-      right: 15px;
+      z-index: $z-dropdown - 1;
       height: 60px;
       width: 60px;
       padding: 0;
       border-radius: 50%;
       background-color: $c-bg;
       border: 1px solid $c-border;
+
+      @media (max-width: $w-max) {
+        right: 10px;
+      }
     }
   }
 
