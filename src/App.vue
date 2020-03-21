@@ -3,7 +3,9 @@
     <div class="install-prompt">
       <h1> Mage Hand </h1>
       <img src="./assets/icon-image.png" />
-      Mage Hand is designed to run as a native app on mobile, click below to install
+      Character sheet and stats tracker for D&D 5th Edition
+      <br/><br/>
+      Mage Hand is designed to run as a native app on mobile, click below to download
       <br/>
       <button @click="showPrompt()"> Install Mage Hand </button>
     </div>
@@ -23,7 +25,7 @@
           <header>
             <h1> Mage Hand </h1>
             <p>
-              D&D 5e character sheet and stat tracker
+              Character sheet and stats tracker for D&D 5th Edition
             </p>
           </header>
           <table>
@@ -145,17 +147,17 @@
   $w-nav-item: 64px;
   $l-ani: 0.3s;
 
-  @media (max-width: $w-max) and (display-mode: browser) {
-    main {
-      display: none;
-    }
-  }
+  // @media (max-width: $w-max) and (display-mode: browser) {
+  //   main {
+  //     display: none;
+  //   }
+  // }
 
-  @media (min-width: $w-max), (display-mode: standalone), (display-mode: fullscreen) {
+  // @media (min-width: $w-max), (display-mode: standalone), (display-mode: fullscreen) {
     .install-prompt {
       display: none;
     }
-  }
+  // }
 
   .install-prompt {
     position: fixed;
@@ -211,8 +213,8 @@
     
     button {
       position: absolute;
-      right: 0px;
-      top: 0px;
+      right: 10px;
+      top: 10px;
       width: 50px;
       height: 50px;
       padding: 0;
@@ -240,6 +242,10 @@
       text-decoration: none;
       color: $c-font;
       font-size: 14px;
+    }
+
+    tr {
+      cursor: pointer;
     }
 
     tr:nth-child(1) i {
@@ -296,16 +302,15 @@
     text-align: center;
     transition:
       width $l-ani,
-      height $l-ani;
-
-    @media (min-width: $w-max) {
-      left: calc(50vw - #{$w-max / 2});
-    }
+      height $l-ani,
+      border-radius $l-ani,
+      bottom $l-ani;
 
     .menu-caret {
       position: absolute;
       bottom: -7px;
       left: -2px;
+      cursor: pointer;
       transition:
         transform $l-ani,
         bottom $l-ani,
@@ -314,18 +319,17 @@
 
     .help-icon {
       position: absolute;
-      top: 0;
-      left: 18px;
       width: 64px;
       height: 64px;
       border-radius: 100%;
       font-size: 28px;
-      font-family: $f-head;
       text-align: center;
       line-height: 64px;
-      background: #444;
-      pointer-events: none;
+      font-family: $f-head;
+      color: #9f9f9f;
       opacity: 0;
+      background: #303030;
+      pointer-events: none;
       user-select: none;
     }
 
@@ -337,6 +341,7 @@
       opacity: 0;
       pointer-events: none;
       overflow: hidden;
+      cursor: pointer;
 
       &:nth-child(1) {
         top: 15%;
@@ -382,18 +387,56 @@
       .nav-item {
         opacity: 1;
         pointer-events: all;
-        transition: opacity $l-ani;
+        transition: opacity #{$l-ani - 0.05} ease 0.05s;
         animation: pause-pointer-events $l-ani 1;
       }
 
       .help-icon {
-        top: -75px;
-        opacity: 0.6;
+        opacity: 1;
         pointer-events: all;
         transition:
           top $l-ani,
           opacity $l-ani;
         animation: pause-pointer-events $l-ani 1;
+      }
+    }
+
+    @media (min-width: 400px) {
+      .help-icon {
+        bottom: 24px;
+        right: 0;
+      }
+
+      &.open .help-icon {
+        right: -82px
+      }
+    }
+
+    @media (max-width: 399px) {
+      .help-icon {
+        top: 0;
+        left: 18px;
+      }
+
+      &.open .help-icon {
+        top: -75px;
+        right: -9px
+      }
+    }
+
+    @media (min-width: $w-max) {
+      left: calc(50vw - #{$w-max / 2});
+      bottom: 10px;
+      border-radius: 32px;
+
+      .menu-caret {
+        bottom: -2px;
+        left: 5px;
+      }
+
+      &.open {
+        bottom: 0;
+        border-radius: 32px 100% 0 32px;
       }
     }
   }

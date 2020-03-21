@@ -197,6 +197,7 @@
 
       .skill-list div {
         margin-bottom: 6px;
+        cursor: pointer;
       }
     }
   }
@@ -313,6 +314,8 @@
           padding-top: 2px;
           border-radius: $br-el 12px $br-el $br-el;
           background: $c-bg;
+          cursor: pointer;
+          user-select: none;
 
           .num {
             color: transparent;
@@ -371,6 +374,7 @@
     &>div {
       float: left;
       width: 50%;
+      user-select: none;
       transition: margin-bottom $l-ani;
 
       div {

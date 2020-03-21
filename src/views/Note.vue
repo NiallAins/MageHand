@@ -125,7 +125,7 @@
     overflow: hidden;
     
     &.open {
-      height: calc(100vh - 20px);
+      height: calc(100vh - 100px);
 
       i.icon-expand {
         transform:
@@ -149,6 +149,7 @@
 
       i {
         position: absolute;
+        cursor: pointer;
         
         &.icon-expand {
           top: 7px;
@@ -176,7 +177,7 @@
     }
     
     &.open .note-content {
-      height: calc(100vh - 100px);
+      height: calc(100vh - 164px);
       border: 1px solid $c-border;
       border-top-width: 0;
       transition: height 0.3s;

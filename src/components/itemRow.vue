@@ -92,6 +92,7 @@
     }
 
     i {
+      cursor: pointer;
       float: left;
     }
 

@@ -479,6 +479,7 @@
         margin: 0 -1px -1px 0;
         text-indent: 10%;
         background: #111;
+        cursor: pointer;
         
         &.open {
           position: relative;
