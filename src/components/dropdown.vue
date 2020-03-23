@@ -104,6 +104,7 @@
       text-transform: capitalize;
       max-height: 320px;
       overflow: auto;
+      @include scrollbar;
       
       li {
         height: 0;
@@ -111,7 +112,7 @@
         overflow: hidden;
         font-size: $f-size-bg;
         line-height: $f-height-bg;
-        transition: height 0.2s;
+        transition: height $l-ani-dd;
         
         &:hover {
           background-color: $c-bg-light;

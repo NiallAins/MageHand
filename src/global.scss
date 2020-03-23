@@ -13,19 +13,7 @@ body {
   font-size: $f-size-md;
   line-height: $f-height-md;
   color: $c-font;
-
-  &::-webkit-scrollbar {
-    width: 8px;
-  }
-  
-  &::-webkit-scrollbar-track {
-    background: none;
-  }
-  
-  &::-webkit-scrollbar-thumb {
-    background-color: $c-bg-light;
-    border-radius: 3px;
-  }
+  @include scrollbar;
   
   h1, h2, h3, h4, h4, h6 {
     font-family: $f-head;
@@ -136,19 +124,7 @@ body {
     .scroll-container-child {
       padding: 20px 0;
       overflow-y: auto;
-
-      &::-webkit-scrollbar {
-        width: 6px;
-      }
-      
-      &::-webkit-scrollbar-track {
-        background: none;
-      }
-      
-      &::-webkit-scrollbar-thumb {
-        background-color: $c-bg-light;
-        border-radius: 3px;
-      }
+      @include scrollbar;
     }
 
     &:before,

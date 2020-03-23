@@ -174,7 +174,6 @@
 
   $c-prim: $c-stat;
   $c-sec: lighten($c-prim, 20%);
-  $l-ani: 0.7s;
 
   #page_stat {
     @media (max-width: 390px) {
@@ -208,7 +207,7 @@
     height: 80px;
     padding-bottom: 25px;
     text-align: center;
-    transition: padding-bottom $l-ani;
+    transition: padding-bottom $l-ani-reveal-slow;
 
     .touch-button {
       position: absolute;
@@ -267,7 +266,7 @@
 
       h4 {
         font-size: 15px;
-        transition: font-size $l-ani;
+        transition: font-size $l-ani-reveal-slow;
 
         &.font-lg {
           font-size: 20px;
@@ -300,11 +299,11 @@
         background: $c-bg;
         overflow: hidden;
         transition:
-          width $l-ani,
-          height $l-ani,
-          opacity $l-ani,
-          bottom $l-ani,
-          border-radius $l-ani;
+          width $l-ani-reveal-slow,
+          height $l-ani-reveal-slow,
+          opacity $l-ani-reveal-slow,
+          bottom $l-ani-reveal-slow,
+          border-radius $l-ani-reveal-slow;
 
         &.editing {
           opacity: 1;
@@ -334,7 +333,7 @@
 
         .num {
           color: $c-font;
-          transition: color $l-ani;
+          transition: color $l-ani-reveal-slow;
         }
 
         .st {
@@ -345,7 +344,7 @@
           color: transparent;
           line-height: 13px;
           white-space: nowrap;
-          transition: color $l-ani;
+          transition: color $l-ani-reveal-slow;
         }
       }
     }
@@ -364,8 +363,8 @@
     height: 0;
     overflow: hidden;
     transition:
-      height $l-ani,
-      padding $l-ani;
+      height $l-ani-reveal-slow,
+      padding $l-ani-reveal-slow;
   }
 
   .skill-list {
@@ -375,7 +374,7 @@
       float: left;
       width: 50%;
       user-select: none;
-      transition: margin-bottom $l-ani;
+      transition: margin-bottom $l-ani-reveal-slow;
 
       div {
         float: left;

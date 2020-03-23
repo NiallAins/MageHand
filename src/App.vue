@@ -145,7 +145,6 @@
   @import 'global.scss';
   
   $w-nav-item: 64px;
-  $l-ani: 0.3s;
 
   // @media (max-width: $w-max) and (display-mode: browser) {
   //   main {
@@ -301,10 +300,10 @@
     line-height: $w-nav-item;
     text-align: center;
     transition:
-      width $l-ani,
-      height $l-ani,
-      border-radius $l-ani,
-      bottom $l-ani;
+      width $l-ani-mod,
+      height $l-ani-mod,
+      border-radius $l-ani-mod,
+      bottom $l-ani-mod;
 
     .menu-caret {
       position: absolute;
@@ -312,9 +311,9 @@
       left: -2px;
       cursor: pointer;
       transition:
-        transform $l-ani,
-        bottom $l-ani,
-        left $l-ani;
+        transform $l-ani-mod,
+        bottom $l-ani-mod,
+        left $l-ani-mod;
     }
 
     .help-icon {
@@ -387,17 +386,17 @@
       .nav-item {
         opacity: 1;
         pointer-events: all;
-        transition: opacity #{$l-ani - 0.05} ease 0.05s;
-        animation: pause-pointer-events $l-ani 1;
+        transition: opacity #{$l-ani-mod - 0.05} ease 0.05s;
+        animation: pause-pointer-events $l-ani-mod 1;
       }
 
       .help-icon {
         opacity: 1;
         pointer-events: all;
         transition:
-          top $l-ani,
-          opacity $l-ani;
-        animation: pause-pointer-events $l-ani 1;
+          top $l-ani-mod,
+          opacity $l-ani-mod;
+        animation: pause-pointer-events $l-ani-mod 1;
       }
     }
 
@@ -436,7 +435,7 @@
 
       &.open {
         bottom: 0;
-        border-radius: 32px 100% 0 32px;
+        border-radius: 32px 100% 0 0;
       }
     }
   }
@@ -450,7 +449,7 @@
     z-index: $z-nav - 1;
     background: $c-mod-bg;
     opacity: 0;
-    transition: opacity $l-ani;
+    transition: opacity $l-ani-mod;
 
     &.open {
       top: 0;

@@ -22,13 +22,13 @@
       <div>
         <button
           v-for="i in [1, 2, 3]"
-          :class="{ 'succ': true, 'on': deathSaves >= i }"
+          :class="['slot', 'succ', { 'on': deathSaves >= i }]"
           @click="deathSaves += (deathSaves < i ? 1 : -1)"
         ></button>
         <br/>
         <button
           v-for="i in [1, 2, 3]"
-          :class="{ 'fail': true, 'on': deathFails >= i }"
+          :class="['slot', 'fail', { 'on': deathFails >= i }]"
           @click="deathFails += (deathFails < i ? 1 : -1)"
         ></button>
       </div>
@@ -89,32 +89,70 @@
       @close="currentItem = ''"
     ></itemInfo>
 
-    <div :class="['spell-slots', {'open': spellSlotsOpen}]">
+    <div :class="['spell-slots', { 'open': spellSlotsOpen, 'editing': spellSlotsEdit }]">
+      <button class="close" @click="spellSlotsOpen = false; spellSlotsEdit = false;">
+        <i class="icon-close"></i>
+      </button>
       <table>
         <tr>
+          <td></td>
           <td> Level </td>
           <td colspan="4" class="text-left"> Available Slots </td>
+          <td></td>
         </tr>
-        <tr v-for="(slot, level) in userData.spellSlots">
-          <td>{{ level + 1 }}</td>
+        <tr
+          v-for="(slot, level) in userData.spellSlots"
+          :class="{ 'closed': !spellSlotsEdit && slot[0] === 0 }"
+        >
+          <td>
+            <div>
+              <button
+                :class="{ 'inactive': slot[0] === 0 }"
+                @click="setSpellSlot(level, false, true)"
+              > - </button>
+            </div>
+          </td>
+          <td><div> {{ level + 1 }} </div></td>
           <td v-for="i in [1, 2, 3, 4]">
-            <button
-              v-if="slot[0] >= i"
-              :class="{ 'slot': true, 'on': slot[1] >= i }"
-              @click="setSpellSlot(level, slot[1] < i)"
-            ></button>
+            <div>
+              <button
+                v-if="slot[0] >= i"
+                :class="{ 'slot': true, 'on': slot[1] >= i }"
+                @click="setSpellSlot(level, slot[1] < i)"
+              ></button>
+            </div>
+          </td>
+          <td>
+            <div>
+              <button
+                :class="{ 'inactive': slot[0] === 4 }"
+                @click="slot[0] < 4 ? setSpellSlot(level, true, true) : ''"
+              > + </button>
+            </div>
           </td>
         </tr>
       </table>
+      <div class="toggle-edit-container">
+        <div class="pull-left">
+          <button class="clear-slots" @click="clearSlots()"> Clear </button>
+        </div>
+        <div class="pull-right">
+          <button
+            :class="['toggle-edit', { 'active': spellSlotsEdit }]"
+            @click="spellSlotsEdit = !spellSlotsEdit"
+          >
+            <i class="icon-edit"></i>
+          </button>
+        </div>
+      </div>
     </div>
-
     <div
-      :class="['spell-slots-toggle', {'open': spellSlotsOpen}]"
-      v-if="currentTab === 'spells'"
-    >
-      <button @click="spellSlotsOpen = !spellSlotsOpen">
-        {{ spellSlotsOpen ? 'Hide' : 'Show' }} Spell Slots
-      </button>
+      :class="['spell-slots-bg', { 'open': spellSlotsOpen }]"
+      @click="spellSlotsOpen = false; spellSlotsEdit = false;"
+    ></div>
+
+    <div class="spell-slots-toggle" v-if="currentTab === 'spells'">
+      <button @click="spellSlotsOpen = true"> Show Spell Slots </button>
     </div>
   </div>
 </template>
@@ -140,6 +178,7 @@
         deathSaves: 0,
         deathFails: 0,
         spellSlotsOpen: false,
+        spellSlotsEdit: false,
         tabs: ['spells', 'features', 'weapons', 'armour'],
         currentTab: 'spells',
         equipData: { spells: [], features: [], weapons: [], armour: [] },
@@ -167,9 +206,14 @@
           this.rollInit += 20;
         }
       },
-      setSpellSlot: function(level, increment) {
-        let newValue = this.userData.spellSlots[level][1] + (increment ? 1 : -1);
-        Vue.set(this.userData.spellSlots[level], 1, newValue);
+      setSpellSlot: function(level, increment, setAvailable = false) {
+        let editType = setAvailable ? 0 : 1,
+            newValue = this.userData.spellSlots[level][editType] + (increment ? 1 : -1);
+        Vue.set(this.userData.spellSlots[level], editType, newValue);
+        UserData.set('spellSlots', this.userData.spellSlots);
+      },
+      clearSlots: function() {
+        Vue.set(this.userData, 'spellSlots', this.userData.spellSlots.map(s => [s[0], 0]));
         UserData.set('spellSlots', this.userData.spellSlots);
       }
     },
@@ -266,13 +310,17 @@
       border-radius: $br-el 0;
       margin: 0 auto;
       opacity: 0;
-      transition: all 0.5s;
+      transition: all $l-ani-reveal;
       
       &.open {
         height: 90px;
         padding: 10px 0 10px 12px;
         margin: 0 auto 20px;
         opacity: 1;
+      }
+
+      .slot {
+        margin-left: 20px;
       }
       
       div {
@@ -289,13 +337,12 @@
       }
     }
 
-    .death-throws button,
-    .spell-slots button {
+    .death-throws .slot,
+    .spell-slots .slot {
       display: inline-block;
       padding: 10px;
       border: 1px solid $c-border;
       border-radius: 100%;
-      margin-left: 20px;
       vertical-align: middle;
 
       &.succ.on {
@@ -311,36 +358,171 @@
 
     .spell-slots {
       position: fixed;
-      bottom: -100vh;
-      left: $w-pad;
-      right: $w-pad;
-      z-index: $z-modal - 1;
-      height: 470px;
-      background: $c-bg;
+      top: 0;
+      z-index: $z-modal;
+      transform: translateY(-50%);
+      width: calc(100% - #{$w-pad * 2});
+      max-width: #{$w-max - (2 * $w-pad)};
+      max-height: calc(100vh - #{2 * $w-pad});
+      height: auto;
       border: 1px solid $c-border;
-      border-radius: 10px 10px 0 0;
-      transition:
-        bottom 0.3s,
-        z-index 0s linear 0.3s;
+      border-radius: $br-mod 0;
+      background: $c-bg;
+      opacity: 0;
+      overflow: auto;
+      @include scrollbar;
+
+      .close {
+        position: absolute;
+        right: 10px;
+        top: 10px;
+        z-index: 1;
+        text-align: left;
+        padding: 0;
+        border: none;
+      }
+
+      .toggle-edit-container {
+        width: calc(100% - 40px);
+        padding: 0 20px 20px;
+        overflow: hidden;
+
+        div {
+          width: 50%;
+        }
+
+        .pull-left {
+          text-align: left;
+          float: left;
+        }
+
+        .pull-right {
+          float: right;
+          text-align: right;
+        }
+
+        .clear-slots {
+          padding: 0 16px;
+          margin: 3px 0;
+          line-height: 38px;
+          border: 1px solid $c-border;
+          border-radius: $br-el;
+        }
+
+        .toggle-edit {
+          position: unset;
+          right: unset;
+          width: 48px;
+          height: 48px;
+
+          &.active {
+            background: $c-prim;
+          }
+
+          i {
+            margin: -9px 0 0 -9px;
+            transform: scale(0.6);
+          }
+        }
+      }
 
       &.open {
-        bottom: 0px;
-        transition: top 0.3s;
+        top: 50%;
+        opacity: 1;
+        transition: opacity $l-ani-mod;
       }
       
       table {
-        margin: 15px auto;
+        margin: 18px auto 0;
+        padding-right: 10px;
+        
+        td {
+          width: 18%;
+          padding-top: 0;
+          padding-bottom: 8px;
+          line-height: 28px;
+          text-align: center;
+          transition: padding-bottom $l-ani-reveal;
+
+          & > div {
+            height: 32px;
+            overflow: hidden;
+            opacity: 1;
+            transition:
+              height $l-ani-reveal,
+              opacity $l-ani-reveal;
+          }
+
+          &.text-left {
+            text-align: left;
+            text-indent: 8%;
+          }
+
+          &:first-child,
+          &:last-child {
+            position: relative;
+            width: 5%;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity $l-ani-reveal;
+
+            button {
+              height: 32px;
+              width: 32px;
+              border: 1px solid $c-border;
+              border-radius: 100%;
+
+              &.inactive {
+                pointer-events: none;
+                opacity: 0.4;
+              }
+            }
+          }
+          &:first-child {
+            left: 8px;
+          }
+        }
+
+        tr.closed td {
+          padding-bottom: 0; 
+
+          & > div {
+            height: 0;
+          }
+        }
       }
 
-      td {
-        text-align: center;
-        width: 18%;
-        height: 30px; 
-
-        &.text-left {
-          text-align: left;
-          text-indent: 20px;
+      &.editing {
+        td {
+          padding-bottom: 20px;
         }
+
+        td:first-child,
+        td:last-child {
+          opacity: 1;
+          pointer-events: all;
+        }
+
+        .slot {
+          pointer-events: none;
+        }
+      }
+    }
+
+    .spell-slots-bg {
+      position: fixed;
+      top: 0;
+      right: 0;
+      left: 0;
+      z-index: $z-modal - 1;
+      height: 0;
+      background: $c-mod-bg;
+      opacity: 0;
+
+      &.open {
+        height: 100vh;
+        opacity: 1;
+        transition: opacity $l-ani-mod;
       }
     }
 
@@ -349,12 +531,8 @@
       left: 0;
       bottom: 20px;
       z-index: $z-nav - 1;
-      width: 100%;
+      width: calc(100% - #{$w-pad * 2});
       text-align: center;
-
-      &.open {
-        z-index: $z-modal - 1;
-      }
 
       button {
         width: 180px;
@@ -362,7 +540,7 @@
         border: 1px solid $c-border;
         border-radius: 10px;
         background: $c-bg;
-        font-size: 16px;
+        font-size: $f-size-md;
       }
     }
 
@@ -497,7 +675,7 @@
     
     .scroll-container-child {
       height: calc(100vh - 410px);
-      transition: height 0.5s;
+      transition: height $l-ani-reveal;
 
       &.death-throws-open {
         height: calc(100vh - 540px);

@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/MageHand/dist/precache-manifest.de825d5ff89d733b0673cfc60bd6b753.js"
+  "/MageHand/dist/precache-manifest.afd40d71541e3f6bd923ce7165601081.js"
 );
 
 workbox.core.setCacheNameDetails({prefix: "dnder"});

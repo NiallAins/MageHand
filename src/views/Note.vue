@@ -121,7 +121,7 @@
 
   .note-container {
     height: 67px;
-    transition: height 0.3s;
+    transition: height $l-ani-mod;
     overflow: hidden;
     
     &.open {
@@ -154,7 +154,7 @@
         &.icon-expand {
           top: 7px;
           left: 4px;
-          transition: transform 0.2s;
+          transition: transform $l-ani-mod;
         }
         
         &.icon-close {
@@ -172,15 +172,15 @@
       border-width: 0px;
       border-radius: 0 0 $br-el $br-el;
       transition:
-        height 0.3s,
-        border-width 0s linear 0.3s;
+        height $l-ani-mod,
+        border-width 0s linear $l-ani-mod;
     }
     
     &.open .note-content {
       height: calc(100vh - 164px);
       border: 1px solid $c-border;
       border-top-width: 0;
-      transition: height 0.3s;
+      transition: height $l-ani-mod;
     }
   }
 
@@ -193,13 +193,13 @@
     z-index: -10;
     opacity: 0;
     transition:
-      opacity 0.4s,
-      z-index 0s linear 0.4s;
+      opacity $l-ani-mod,
+      z-index 0s linear $l-ani-mod;
     
     &.open {
       z-index: 10;
       opacity: 1;
-      transition: opacity 0.4s;
+      transition: opacity $l-ani-mod;
     }
     
     .modal-content {

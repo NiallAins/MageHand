@@ -17,6 +17,7 @@ $f-head: 'Fondamento', cursive;
 $f-size-md: 16px;
 $f-height-md: 24px;
 $f-size-bg: 18px;
+$f-size-lg: 24px;
 $f-height-bg: 34px;
 
 $w-min: 304px;
@@ -26,6 +27,26 @@ $w-pad: 8px;
 $br-el: 5px;
 $br-mod: 15px;
 
+$l-ani-mod: 0.3s;
+$l-ani-dd: 0.2s;
+$l-ani-reveal: 0.5s;
+$l-ani-reveal-slow: 0.7s;
+
 $z-dropdown: 10;
 $z-nav: 20;
 $z-modal: 30;
+
+@mixin scrollbar {
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+  
+  &::-webkit-scrollbar-track {
+    background: none;
+  }
+  
+  &::-webkit-scrollbar-thumb {
+    background-color: $c-bg-light;
+    border-radius: 3px;
+  }
+}

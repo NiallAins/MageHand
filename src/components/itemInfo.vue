@@ -217,14 +217,14 @@
     background: $c-mod-bg;
     opacity: 0;
     transition:
-      opacity 0.4s,
-      z-index 0s ease 0.4s;
+      opacity $l-ani-mod,
+      z-index 0s ease $l-ani-mod;
     
     &.open {
       opacity: 1;
       z-index: $z-modal;
       transition:
-        opacity 0.4s;
+        opacity $l-ani-mod;
     }
     
     .modal {
@@ -294,7 +294,7 @@
         line-height: 35px;
         border: 1px solid $c-border;
         border-radius: $br-el;
-        font-size: 16px;
+        font-size: $f-size-md;
         
         &:active {
           background: $c-border;

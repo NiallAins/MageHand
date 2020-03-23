@@ -188,6 +188,7 @@
       right: 10px;
       z-index: 1;
       font-size: 25px;
+      cursor: pointer;
     }
     
     .autocomplete-list {
