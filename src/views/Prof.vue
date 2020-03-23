@@ -115,12 +115,16 @@
         placeholder="Background..."
       ></dropdown>
     </div>
+    <div class="text-border"><br/></div>
     <textbox
+      v-if="userData.desc || editing"
       v-model="userData.desc"
       placeholder="Character description..."
       :readonly="!editing"
     ></textbox>
+    <div class="text-border"></div>
     <textbox
+      v-if="userData.traits || editing"
       v-model="userData.traits"
       placeholder="Traits, skills & languages..."
       :readonly="!editing"
@@ -188,10 +192,22 @@
       float: left;
     }
 
-    &.readonly input,
-    &.readonly .level input {
-      border: none;
-      pointer-events: none;
+    &.readonly {
+      input,
+      .level input {
+        border: none;
+        pointer-events: none;
+      }
+
+      .textbox {
+        border: none;
+      }
+
+      .text-border {
+        float: left;
+        width: 100%;
+        border-bottom: 1px solid $c-bg-nav;
+      }
     }
     
     .name {
@@ -267,7 +283,7 @@
     .textbox {
       float: left;
       clear: both;
-      margin-top: 14px;
+      margin: 7px 0;
       min-height: 4em;
     }
 

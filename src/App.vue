@@ -293,7 +293,7 @@
     bottom: 0;
     left: 0;
     z-index: $z-nav;
-    background: #444;
+    background: $c-bg-nav;
     width: $w-nav-item;
     height: $w-nav-item;
     border-radius: 0 100% 0 0;

@@ -101,7 +101,7 @@
 
   input:focus,
   textarea:focus {
-    outline: 1px solid $c-prim;
+    outline: 2px solid $c-prim;
     outline-offset: -3px;
   }
 
@@ -137,7 +137,7 @@
     .note-header {
       position: relative;
       padding-left: 60px;
-      background: #333;
+      background: $c-bg-light;
 
       input {
         line-height: 64px;

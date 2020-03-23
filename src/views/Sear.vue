@@ -155,7 +155,7 @@
         border-radius: $br-el $br-el 0 0;
         margin: 0 -1px -1px 0;
         text-indent: 10%;
-        background: #111;
+        background: $c-bg-tab;
         
         &.open {
           border-bottom-color: $c-bg;

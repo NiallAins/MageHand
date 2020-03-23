@@ -358,7 +358,7 @@
 
     .spell-slots {
       position: fixed;
-      top: 0;
+      top: -100vh;
       z-index: $z-modal;
       transform: translateY(-50%);
       width: calc(100% - #{$w-pad * 2});
@@ -656,7 +656,7 @@
         border-radius: $br-el $br-el 0 0;
         margin: 0 -1px -1px 0;
         text-indent: 10%;
-        background: #111;
+        background: $c-bg-tab;
         cursor: pointer;
         
         &.open {
