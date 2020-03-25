@@ -1,7 +1,7 @@
-- Search autocomplete bug fix
-- Item Info
-  - API item bug fix (Channel Divinity)
-  - Fixed scroll overlays
-  - Item pack support
+- Search
   - Custom items
-- Improve design of profile page
+  - Incrementer
+  - Toasts
+- Button active highlight
+- Notes
+  - Scrolling

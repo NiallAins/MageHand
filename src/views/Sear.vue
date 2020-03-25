@@ -25,7 +25,7 @@
       <span
         v-if="acValue !== ''"
         class="clear-search"
-        @click="acValue = ''; acUpdate()"
+        @click="acValue = ''; acUpdate();"
       > × </span>
       <div class="autocomplete-container">
         <ul
@@ -44,6 +44,10 @@
         </ul>
       </div>
     </div>
+    <div
+      :class="['autocomplete-bg', { 'open': acList.length > 0 }]"
+      @click="acValue = ''; acUpdate();"
+    ></div>
 
     <div class="scroll-container">
       <div class="scroll-container-child">
@@ -106,7 +110,6 @@
           let len = 0;
           this.acList = this.lists[this.listType].filter(item => {
             if (
-              len < 6 &&
               (item.name || item)
                 .split('-')
                 .some(i => i.substr(0, matchLength) === matchValue)
@@ -197,11 +200,13 @@
       left: 0;
       right: 0;
       z-index: $z-dropdown;
+      max-height: 192px;
       border: solid $c-border;
       border-width: 0px 1px 1px 1px;
-      overflow: hidden;
+      overflow: auto;
       background: $c-bg;
       text-transform: capitalize;
+      @include scrollbar;
       
       li {
         padding: 5px $w-pad;
@@ -212,6 +217,19 @@
           background-color: $c-bg-light;
         }
       }
+    }
+  }
+
+  .autocomplete-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: $z-dropdown - 1;
+    height: 0;
+
+    &.open {
+      height: 100vh;
     }
   }
 

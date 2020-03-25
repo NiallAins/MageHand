@@ -1,4 +1,4 @@
-const defaultUserData = '{"name":"","stats":[10,10,10,10,10,10],"savingThrow":[],"spellSlots":[[2,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0]],"profSkills":[],"prof":2,"speed":30,"hp":10,"maxHp":10,"level":1,"race":"","class":"","subclass":"","align":"","desc":"","traits":"","equipment":[],"spells":[],"features":[],"notes":[]}';
+const defaultUserData = '{"new":true,"name":"","stats":[10,10,10,10,10,10],"savingThrow":[],"spellSlots":[[2,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0]],"profSkills":[],"prof":2,"speed":30,"hp":10,"maxHp":10,"level":1,"race":"","class":"","subclass":"","align":"","desc":"","traits":"","equipment":[],"spells":[],"features":[],"notes":[]}';
 
 export default {
   data: {},

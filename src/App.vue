@@ -115,7 +115,7 @@
     data: function() {
       return {
         currentView: 'prof',
-        showHelp: true,
+        showHelp: false,
         navOpen: false,
         navItems: {
           'prof': 'Profile',
@@ -128,6 +128,11 @@
     },
     created: function() {
       UserData.loadData();
+
+      if (UserData.new) {
+        this.showHelp = true;
+        UserData.set('new', false);
+      }
     },
     methods: {
       showPrompt: function() {
@@ -146,17 +151,17 @@
   
   $w-nav-item: 64px;
 
-  @media (max-width: $w-max) and (display-mode: browser) {
-    main {
-      display: none;
-    }
-  }
+  // @media (max-width: $w-max) and (display-mode: browser) {
+  //   main {
+  //     display: none;
+  //   }
+  // }
 
-  @media (min-width: $w-max), (display-mode: standalone), (display-mode: fullscreen) {
+  // @media (min-width: $w-max), (display-mode: standalone), (display-mode: fullscreen) {
     .install-prompt {
       display: none;
     }
-  }
+  // }
 
   .install-prompt {
     position: fixed;

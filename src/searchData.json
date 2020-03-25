@@ -367,10 +367,22 @@
 			"name": "channel-divinity-2+-rests",
 			"url": "channel-divinity-2-rest"
 		},
-    "channel-divinity-preserve-life",
-    "channel-divinity-sacred-weapon",
-    "channel-divinity-turn-the-unholy",
-    "channel-divinity-turn-undead",
+		{
+			"name": "preserve-life",
+			"url": "channel-divinity-preserve-life"
+		},
+		{
+			"name": "sacred-weapon",
+			"url": "channel-divinity-sacred-weapon"
+		},
+		{
+			"name": "turn-the-unholy",
+			"url": "channel-divinity-turn-the-unholy" 
+		},
+		{
+			"name": "turn-undead",
+			"url": "channel-divinity-turn-undead" 
+		},
     "choose-additional-eldritch-invocation",
     "choose-additional-fighting-style",
     "choose-additional-metamagic",
@@ -409,10 +421,19 @@
     "cutting-words",
     "danger-sense",
     "dark-ones-blessing",
-    "dark-ones-own-luck",
-    "defensive-tactics-escape-the-horde",
-    "defensive-tactics-multiattack-defense",
-    "defensive-tactics-steel-will",
+		"dark-ones-own-luck",
+		{
+			"name": "escape-the-horde",
+			"url": "defensive-tactics-escape-the-horde"
+		},
+		{
+			"name": "multiattack-defense",
+			"url": "defensive-tactics-multiattack-defense"
+		},
+		{
+			"name": "steel-will",
+			"url":  "defensive-tactics-steel-will"
+		},
     "deflect-missiles",
     {
 			"name": "destroy-undead",
@@ -444,38 +465,134 @@
 		},
     "druid-circle",
     "druidic",
-    "eldritch-invocation-agonizing-blast",
-    "eldritch-invocation-armor-of-shadows",
-    "eldritch-invocation-ascendant-step",
-    "eldritch-invocation-beast-speech",
-    "eldritch-invocation-beguiling-influence",
-    "eldritch-invocation-bewitching-whispers",
-    "eldritch-invocation-book-of-ancient-secrets",
-    "eldritch-invocation-chains-of-carceri",
-    "eldritch-invocation-devils-sight",
-    "eldritch-invocation-dreadful-word",
-    "eldritch-invocation-eldritch-sight",
-    "eldritch-invocation-eldritch-spear",
-    "eldritch-invocation-eyes-of-the-rune-keeper",
-    "eldritch-invocation-fiendish-vigor",
-    "eldritch-invocation-gaze-of-two-minds",
-    "eldritch-invocation-lifedrinker",
-    "eldritch-invocation-mask-of-many-faces",
-    "eldritch-invocation-master-of-myriad-forms",
-    "eldritch-invocation-minions-of-chaos",
-    "eldritch-invocation-mire-the-mind",
-    "eldritch-invocation-misty-visions",
-    "eldritch-invocation-one-with-shadows",
-    "eldritch-invocation-otherworldly-leap",
-    "eldritch-invocation-repelling-blast",
-    "eldritch-invocation-sculptor-of-flesh",
-    "eldritch-invocation-sign-of-ill-omen",
-    "eldritch-invocation-thief-of-five-fates",
-    "eldritch-invocation-thirsting-blade",
-    "eldritch-invocation-visions-of-distant-realms",
-    "eldritch-invocation-voice-of-the-chain-master",
-    "eldritch-invocation-whispers-of-the-grave",
-    "eldritch-invocation-witch-sight",
+    {
+			"name": "agonizing-blast",
+			"url": "eldritch-invocation-agonizing-blast"
+		},
+    {
+			"name": "armor-of-shadows",
+			"url": "eldritch-invocation-armor-of-shadows"
+		},
+    {
+			"name": "ascendant-step",
+			"url": "eldritch-invocation-ascendant-step"
+		},
+    {
+			"name": "beast-speech",
+			"url": "eldritch-invocation-beast-speech"
+		},
+    {
+			"name": "beguiling-influence",
+			"url": "eldritch-invocation-beguiling-influence"
+		},
+    {
+			"name": "bewitching-whispers",
+			"url": "eldritch-invocation-bewitching-whispers"
+		},
+    {
+			"name": "book-of-ancient-secrets",
+			"url": "eldritch-invocation-book-of-ancient-secrets"
+		},
+    {
+			"name": "chains-of-carceri",
+			"url": "eldritch-invocation-chains-of-carceri"
+		},
+    {
+			"name": "devils-sight",
+			"url": "eldritch-invocation-devils-sight"
+		},
+    {
+			"name": "dreadful-word",
+			"url": "eldritch-invocation-dreadful-word"
+		},
+    {
+			"name": "eldritch-sight",
+			"url": "eldritch-invocation-eldritch-sight"
+		},
+    {
+			"name": "eldritch-spear",
+			"url": "eldritch-invocation-eldritch-spear"
+		},
+    {
+			"name": "eyes-of-the-rune-keeper",
+			"url": "eldritch-invocation-eyes-of-the-rune-keeper"
+		},
+    {
+			"name": "fiendish-vigor",
+			"url": "eldritch-invocation-fiendish-vigor"
+		},
+    {
+			"name": "gaze-of-two-minds",
+			"url": "eldritch-invocation-gaze-of-two-minds"
+		},
+    {
+			"name": "lifedrinker",
+			"url": "eldritch-invocation-lifedrinker"
+		},
+    {
+			"name": "mask-of-many-faces",
+			"url": "eldritch-invocation-mask-of-many-faces"
+		},
+    {
+			"name": "master-of-myriad-forms",
+			"url": "eldritch-invocation-master-of-myriad-forms"
+		},
+    {
+			"name": "minions-of-chaos",
+			"url": "eldritch-invocation-minions-of-chaos"
+		},
+    {
+			"name": "mire-the-mind",
+			"url": "eldritch-invocation-mire-the-mind"
+		},
+    {
+			"name": "misty-visions",
+			"url": "eldritch-invocation-misty-visions"
+		},
+    {
+			"name": "one-with-shadows",
+			"url": "eldritch-invocation-one-with-shadows"
+		},
+    {
+			"name": "otherworldly-leap",
+			"url": "eldritch-invocation-otherworldly-leap"
+		},
+    {
+			"name": "repelling-blast",
+			"url": "eldritch-invocation-repelling-blast"
+		},
+    {
+			"name": "sculptor-of-flesh",
+			"url": "eldritch-invocation-sculptor-of-flesh"
+		},
+    {
+			"name": "sign-of-ill-omen",
+			"url": "eldritch-invocation-sign-of-ill-omen"
+		},
+    {
+			"name": "thief-of-five-fates",
+			"url": "eldritch-invocation-thief-of-five-fates"
+		},
+    {
+			"name": "thirsting-blade",
+			"url": "eldritch-invocation-thirsting-blade"
+		},
+    {
+			"name": "visions-of-distant-realms",
+			"url": "eldritch-invocation-visions-of-distant-realms"
+		},
+    {
+			"name": "voice-of-the-chain-master",
+			"url": "eldritch-invocation-voice-of-the-chain-master"
+		},
+    {
+			"name": "whispers-of-the-grave",
+			"url": "eldritch-invocation-whispers-of-the-grave"
+		},
+    {
+			"name": "witch-sight",
+			"url": "eldritch-invocation-witch-sight"
+		},
     "eldritch-master",
     "elemental-affinity",
     "elusive",
@@ -525,8 +642,14 @@
     "fighting-style-great-weapon-fighting",
     "fighting-style-protection",
     "fighting-style-two-weapon-fighting",
-    "flexible-casting-converting-spell-slot",
-    "flexible-casting-creating-spell-slots",
+    {
+			"name": "converting-spell-slot",
+			"url": "flexible-casting-converting-spell-slot"
+		},
+    {
+			"name": "creating-spell-slots",
+			"url": "flexible-casting-creating-spell-slots"
+		},
     "flurry-of-blows",
     "foe-slayer",
     "font-of-inspiration",
@@ -556,14 +679,38 @@
 		},
     "martial-archetype",
     "martial-arts",
-    "metamagic-careful-spell",
-    "metamagic-distant-spell",
-    "metamagic-empowered-spell",
-    "metamagic-extended-spell",
-    "metamagic-heightened-spell",
-    "metamagic-quickened-spell",
-    "metamagic-subtle-spell",
-    "metamagic-twinned-spell",
+    {
+			"name": "careful-spell",
+			"url": "metamagic-careful-spell"
+		},
+    {
+			"name": "distant-spell",
+			"url": "metamagic-distant-spell"
+		},
+    {
+			"name": "empowered-spell",
+			"url": "metamagic-empowered-spell"
+		},
+    {
+			"name": "extended-spell",
+			"url": "metamagic-extended-spell"
+		},
+    {
+			"name": "heightened-spell",
+			"url": "metamagic-heightened-spell"
+		},
+    {
+			"name": "quickened-spell",
+			"url": "metamagic-quickened-spell"
+		},
+    {
+			"name": "subtle-spell",
+			"url": "metamagic-subtle-spell"
+		},
+    {
+			"name": "twinned-spell",
+			"url": "metamagic-twinned-spell"
+		},
     "mindless-rage",
     "monastic-tradition",
     {
@@ -649,10 +796,19 @@
     "stillness-of-mind",
     "stroke-of-luck",
     "stunning-strike",
-    "superior-critical",
-    "superior-hunters-defense-evasion",
-    "superior-hunters-defense-stand-against-the-tide",
-    "superior-hunters-defense-uncanny-dodge",
+		"superior-critical",
+		{
+			"name": "defense-evasion",
+			"url": "superior-hunters-defense-evasion"
+		},
+		{
+			"name": "stand-against-the-tide",
+			"url": "superior-hunters-defense-stand-against-the-tide"
+		},
+		{
+			"name": "uncanny-dodge",
+			"url": "superior-hunters-defense-uncanny-dodge"
+		},
     "superior-inspiration",
     "supreme-healing",
     "supreme-sneak",
@@ -751,6 +907,7 @@
 		"cobblers-tools",
 		"component-pouch",
 		"cooks-utensils",
+		"copper-piece",
 		"crossbow-bolt",
 		"crossbow-hand",
 		"crossbow-heavy",
@@ -766,6 +923,7 @@
 		"drum",
 		"dulcimer",
 		"dungeoneers-pack",
+		"electrum-piece",
 		"elephant",
 		"emblem",
 		"entertainers-pack",
@@ -778,6 +936,7 @@
 		"galley",
 		"glaive",
 		"glassblowers-tools",
+		"gold-piece",
 		"grappling-hook",
 		"greataxe",
 		"greatclub",
@@ -840,6 +999,7 @@
 		"pike",
 		"piton",
 		"plate",
+		"platinum-piece",
 		"playing-card-set",
 		"poison-basic-vial",
 		"poisoners-kit",
@@ -882,6 +1042,7 @@
 		"sickle",
 		"signal-whistle",
 		"signet-ring",
+		"silver-piece",
 		"sled",
 		"sling",
 		"sling-bullet",

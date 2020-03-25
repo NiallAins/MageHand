@@ -10,7 +10,7 @@
   >
     <div class="modal">
       <div v-if="info">
-        <h3>
+        <h3 :class="{ 'font-sm': info.name.length > 18 }">
           {{ info.name }}
           <i
             class="icon-close"
@@ -22,7 +22,7 @@
           <div class="scroll-container-child">
             <ul v-if="type === 'spells'">
               <li>
-                {{ info.level === 0 ? 'Cantrip of' : 'Level ' + info.level }}
+                {{ info.level === 0 ? 'Cantrip of' : 'Level ' + info.level + ' Spell' }}
                 {{ info.school.name }}
               </li>
               <li> Uses {{ info.components.map(c => spellComponents[c]).join(', ') }} </li>
@@ -89,6 +89,16 @@
                   {{ costUnits[info.cost.unit] || info.cost.unit }}
                 </span>
               </li>
+
+              <li class="gear-list" v-if="info.gear_category === 'Equipment Pack'">
+                Contents:
+                <ul>
+                  <li v-for="i in info.contents">
+                    {{ i.item_url.replace('/api/equipment/', '').replace(/-/g, ' ') }}
+                    <span v-if="i.quantity > 1"> &times;</span>{{ i.quantity > 1 ? i.quantity : '' }}
+                  </li>
+                </ul>
+              </li>
             </ul>
 
             <ul v-if="type === 'features'">
@@ -109,7 +119,7 @@
             $emit('close');
             fadeIn = false
           ">
-            Add
+            Add {{ info.gear_category === 'Equipment Pack' ? 'Contents' : '' }}
           </button>
         </div>
       </div>
@@ -154,8 +164,67 @@
       this.costUnits = {
         'gp': 'gold',
         'sp': 'silver',
-        'cp': 'copper'
+        'cp': 'copper',
+        'pp': 'platinum',
+        'ep': 'electrum'
       };
+      this.customItems = [
+        {
+          "name": "gold piece",
+          "index": "gold-piece",
+          "equipment_category": "currency",
+          "cost": {
+            "quantity": 1,
+            "unit": "gp"
+          },
+          "weight": "1/50",
+          "desc": ["A gold coin. The standard unit of measure for wealth."]
+        },
+        {
+          "name": "silver piece",
+          "index": "silver-piece",
+          "equipment_category": "currency",
+          "cost": {
+            "quantity": 1,
+            "unit": "sp"
+          },
+          "weight": "1/50",
+          "desc": ["A silver coin. Ten silver is worth one gold."]
+        },
+        {
+          "name": "copper piece",
+          "index": "copper-piece",
+          "equipment_category": "currency",
+          "cost": {
+            "quantity": 1,
+            "unit": "cp"
+          },
+          "weight": "1/50",
+          "desc": ["A copper coin. Ten copper is worth one silver, one hundred is worth one gold."]
+        },
+        {
+          "name": "platinum piece",
+          "index": "platinum-piece",
+          "equipment_category": "currency",
+          "cost": {
+            "quantity": 10,
+            "unit": "gp"
+          },
+          "weight": "1/50",
+          "desc": ["A rare platinum coin. Originating from fallen empires and lost kingdoms, they sometimes arouse suspicion and skepticism when used in transactions."]
+        },
+        {
+          "name": "electrum piece",
+          "index": "electrum-piece",
+          "equipment_category": "currency",
+          "cost": {
+            "quantity": 5,
+            "unit": "sp"
+          },
+          "weight": "1/50",
+          "desc": ["A rare electrum coin. Originating from fallen empires and lost kingdoms, they sometimes arouse suspicion and skepticism when used in transactions."]
+        }
+      ];
     },
     watch: {
       itemindex: function() {
@@ -167,37 +236,64 @@
         if (this.itemindex) {
           this.info = null;
           this.fadeIn = true;
-          let ajax = new XMLHttpRequest(),
-              url = `https://www.dnd5eapi.co/api/${this.type}/${this.itemindex}`;
-          ajax.onload = () => {
-            if (ajax.status >= 200 && ajax.status < 300) {
-              this.info = JSON.parse(ajax.responseText);
-              this.canAdd = UserData.data[this.type].findIndex(i => i.index === this.info.index) === -1;
-            }
-          };
-          ajax.open('GET', url);
-          ajax.send();
+          let customItemIndex = this.customItems.findIndex(i => i.index === this.itemindex);
+          if (customItemIndex > -1) {
+            this.info = this.customItems[customItemIndex];
+            this.canAdd = UserData.data[this.type].findIndex(i => i.index === this.info.index) === -1;
+          } else {
+            let ajax = new XMLHttpRequest(),
+                url = `https://www.dnd5eapi.co/api/${this.type}/${this.itemindex}`;
+            ajax.onload = () => {
+              if (ajax.status >= 200 && ajax.status < 300) {
+                this.info = JSON.parse(ajax.responseText);
+                this.canAdd = UserData.data[this.type].findIndex(i => i.index === this.info.index) === -1;
+              }
+            };
+            ajax.open('GET', url);
+            ajax.send();
+          }
+        } else {
+          this.info = null;
         }
       },
-
-      addItem: function() {
-        let item = {
-          index: this.info.index
-        };
-        if (this.type === 'equipment') {
-          item.equip = false;
-          item.prof = false;
-          if (this.info.damage) {
-            item.attack = this.info.damage.damage_dice + ' ' + this.info.damage.damage_type.name;
+      addItem: function(item) {
+        if (!item && this.info.gear_category === 'Equipment Pack') {
+          this.info.contents.forEach(packItem => {
+            let ajax = new XMLHttpRequest(),
+                url = 'https://www.dnd5eapi.co' + packItem.item_url;
+            ajax.onload = () => {
+              if (ajax.status >= 200 && ajax.status < 300) {
+                this.addItem(JSON.parse(ajax.responseText));
+              }
+            }
+            ajax.open('GET', url);
+            ajax.send();
+          });
+        } else {
+          if (!item) {
+            item = this.info;
           }
-          if (this.info.armor_class) {
-            item.ac = this.info.armor_class.base;
+          if (UserData.data[this.type].findIndex(i => i.index === item.index) > -1) {
+            return;
           }
-        } else if (this.type === 'spells') {
-          item.prep = false;
-          item.level = this.info.level;
+          let newItem = {
+            index: item.index
+          };
+          if (this.type === 'equipment') {
+            newItem.equip = false;
+            newItem.prof = false;
+            if (item.damage) {
+              newItem.attack = item.damage.damage_dice + ' ' + item.damage.damage_type.name;
+            }
+            if (item.armor_class) {
+              newItem.ac = item.armor_class.base;
+            }
+          } else if (this.type === 'spells') {
+            newItem.prep = false;
+            newItem.level = item.level;
+          }
+          UserData.setItem(this.type, newItem);
         }
-        UserData.setItem(this.type, item);
       }
     }
   };
@@ -249,6 +345,12 @@
         line-height: 28px;
         background: $c-bg;
 
+        &.font-sm {
+          font-size: 18px;
+          line-height: 20px;
+          padding-top:  10px;
+        }
+
         .icon-close {
           position: absolute;
           top: 0px;
@@ -260,15 +362,34 @@
         } 
       }
 
+      .gear-list {
+        padding-top: 15px;
+
+        ul {
+          list-style: dotted;
+          padding-left: 20px;
+
+          li {
+            text-transform: capitalize;
+
+            span {
+              font-size: 14px;
+              vertical-align: text-top;
+              padding: 0 1px 0 4px;
+            }
+          }
+        }
+      }
+
       .scroll-container {
         position: absolute;
-        top: 50px;
-        bottom: 50px;
+        top: 52px;
+        bottom: 52px;
         left: $w-pad;
         right: $w-pad;
 
         .scroll-container-child {
-          height: 100%;
+          height: calc(100% - 40px);
           margin-right: 2px;
         }
       }
@@ -285,7 +406,7 @@
       bottom: 0;
       left: 0;
       right: 0;
-      padding: 10px 0;
+      padding: 5px 0 10px;
       background: $c-bg;
       text-align: center;
       
