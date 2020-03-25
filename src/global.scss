@@ -65,6 +65,7 @@ body {
     background: none;
     font-family: $f-prim;
     cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
 
     &:focus {
       outline: none;
@@ -145,5 +146,11 @@ body {
       bottom: 0;
       background: linear-gradient(0deg, $c-bg, #0000);
     }
+  }
+
+  span.times {
+    font-size: 14px;
+    vertical-align: text-top;
+    padding: 0 1px 0 4px;
   }
 }

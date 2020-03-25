@@ -45,7 +45,7 @@
       </div>
     </div>
     <div
-      :class="['autocomplete-bg', { 'open': acList.length > 0 }]"
+      :class="['modal-bg', { 'open': acList.length > 0 }]"
       @click="acValue = ''; acUpdate();"
     ></div>
 
@@ -56,14 +56,50 @@
           :item="item"
           :editmode="true"
           @moreclick="currentItem = $event"
-          @toggleProf="toggleParam($event, 'prof')"
-          @toggleEquip="toggleParam($event, 'equip')"
-          @togglePrep="toggleParam($event, 'prep')"
+          @toggleProf="
+            toggleParam($event, 'prof');
+            setToast('Proficiency ' + (item.prof ? 'Added' : 'Removed'));
+          "
+          @toggleEquip="
+            toggleParam($event, 'equip');
+            setToast('Item ' + (item.equip ? 'Equiped' : 'Unequiped'));
+          "
+          @togglePrep="
+            toggleParam($event, 'prep');
+            setToast(item.prep ? 'Spell Prepared' : 'Removed from Prepared');
+          "
           @removeItem="removeItem($event)"
+          @changeQuantity="setItemQuantity(item, item.quantity + $event)"
+          @quantityHold="quantityModalItem = $event"
         ></itemRow>
       </div>
     </div>
+
+    <div
+      :class="['modal-bg quantity-bg', { 'open': quantityModalItem }]"
+      @click="quantityModalItem = null"
+    ></div>
+    <div
+      :class="['quantity-modal', { 'open': quantityModalItem }]"
+      v-if="quantityModalItem"
+    >
+      <button @click="quantityModalItem = null">
+        <i class="icon-close"></i>
+      </button>
+      <h3> {{ quantityModalItem.index.replace(/-/g, ' ') }} </h3>
+      <p> Set quantity: </p>
+      <input
+        type="number"
+        min="1"
+        :value="quantityModalItem.quantity"
+        @blur="setItemQuantity(quantityModalItem, $event.target.value)"
+      />
+    </div>
   
+    <div :class="['toast', { 'open': toastContent }]">
+      {{ toastContent }}
+    </div>
+
     <itemInfo
       :type="listType"
       :itemindex="currentItem"
@@ -91,6 +127,9 @@
         acValue: '',
         listType: 'spells',
         currentItem: '',
+        quantityModalItem: null,
+        toastContent: '',
+        toastTimeout: null,
         tabs: ['spells', 'features', 'equipment']
       }
     },
@@ -122,13 +161,21 @@
           this.acList = [];
         }
       },
-
       removeItem: function(itemIndex) {
         UserData.setItem(this.listType, itemIndex, true);
       },
-
       toggleParam: function(itemIndex, param) {
         UserData.toggleItemParam(this.listType, itemIndex, param);
+      },
+      setItemQuantity: function(item, value) {
+        value = parseInt(value);
+        item.quantity = (value > 0 ? value : 1);
+        UserData.toggleItemParam('equipment', item.index, 'quantity', value);
+      },
+      setToast: function(msg) {
+        this.toastContent = msg;
+        clearTimeout(this.toastTimeout);
+        this.toastTimeout = setTimeout(() => this.toastContent = '', 1600);
       }
     }
   };
@@ -220,7 +267,99 @@
     }
   }
 
-  .autocomplete-bg {
+  .toast {
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: $z-dropdown;
+    width: 180px;
+    height: 22px;
+    line-height: 22px;
+    padding: 5px 20px;
+    border-radius: $br-el;
+    text-align: center;
+    opacity: 0;
+    transition:
+      opacity $l-ani-dd,
+      bottom 0s ease $l-ani-dd;
+    box-shadow: 0 4px 8px 2px $c-mod-bg;
+
+    &.open {
+      bottom: 50px;
+      opacity: 0.9;
+      transition:
+        opacity $l-ani-dd,
+        bottom $l-ani-dd;
+    }
+  }
+
+  .quantity-modal {
+    position: fixed;
+    top: 50%;
+    left: calc(50% - 136px);
+    z-index: $z-modal;
+    transform: translateY(-50%);
+    width: 250px;
+    padding: 10px;
+    border: 1px solid $c-border;
+    border-radius: $br-mod 0;
+    background: $c-bg;
+    opacity: 0;
+
+    &.open {
+      transition: opacity $l-ani-mod;
+      opacity: 1;
+    }
+
+    button {
+      position: absolute;
+      top: 6px ;
+      right: 0px;
+      text-align: left;
+      border: none;
+    }
+
+    h3 {
+      padding: 0 45px 0 10px;
+      line-height: 42px;
+      font-size: 18px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    p {
+      text-align: center;
+      margin: 0;
+    }
+
+    input {
+      display: block;
+      width: 50px;
+      padding: 10px;
+      border: 1px solid $c-border;
+      margin: 10px auto;
+      color: $c-font;
+      font-size: 18px;
+      font-family: $f-prim;
+      text-align: right;
+      background: $c-bg;
+
+      &::-webkit-outer-spin-button,
+      &::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+      }
+      -moz-appearance: textfield;
+
+      &:focus {
+        outline: 2px solid $c-prim;
+      }
+    }
+  }
+
+  .modal-bg {
     position: fixed;
     top: 0;
     left: 0;
@@ -228,8 +367,15 @@
     z-index: $z-dropdown - 1;
     height: 0;
 
+    &.quantity-bg {
+      background: $c-mod-bg;
+      opacity: 0;
+    }
+
     &.open {
       height: 100vh;
+      opacity: 1;
+      transition: opacity $l-ani-mod;
     }
   }
 

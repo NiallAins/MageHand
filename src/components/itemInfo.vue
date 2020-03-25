@@ -95,7 +95,7 @@
                 <ul>
                   <li v-for="i in info.contents">
                     {{ i.item_url.replace('/api/equipment/', '').replace(/-/g, ' ') }}
-                    <span v-if="i.quantity > 1"> &times;</span>{{ i.quantity > 1 ? i.quantity : '' }}
+                    <span v-if="i.quantity > 1" class="times"> &times;</span>{{ i.quantity > 1 ? i.quantity : '' }}
                   </li>
                 </ul>
               </li>
@@ -256,14 +256,14 @@
           this.info = null;
         }
       },
-      addItem: function(item) {
+      addItem: function(item, quantity = 1) {
         if (!item && this.info.gear_category === 'Equipment Pack') {
           this.info.contents.forEach(packItem => {
             let ajax = new XMLHttpRequest(),
                 url = 'https://www.dnd5eapi.co' + packItem.item_url;
             ajax.onload = () => {
               if (ajax.status >= 200 && ajax.status < 300) {
-                this.addItem(JSON.parse(ajax.responseText));
+                this.addItem(JSON.parse(ajax.responseText), packItem.quantity);
               }
             }
             ajax.open('GET', url);
@@ -284,9 +284,13 @@
             newItem.prof = false;
             if (item.damage) {
               newItem.attack = item.damage.damage_dice + ' ' + item.damage.damage_type.name;
-            }
-            if (item.armor_class) {
+            } else if (item.armor_class) {
               newItem.ac = item.armor_class.base;
+            } else {
+              newItem.quantity = parseInt(quantity);
+            }
+            if (item.gear_category === 'Ammunition') {
+              newItem.ammo = true;
             }
           } else if (this.type === 'spells') {
             newItem.prep = false;
@@ -371,12 +375,6 @@
 
           li {
             text-transform: capitalize;
-
-            span {
-              font-size: 14px;
-              vertical-align: text-top;
-              padding: 0 1px 0 4px;
-            }
           }
         }
       }

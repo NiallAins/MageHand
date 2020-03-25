@@ -1,19 +1,19 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "8137c15e6ae956cc2ce3",
-    "url": "/MageHand/dist/css/app.ad7840c1.css"
+    "revision": "bd579de107fe04b56260",
+    "url": "/MageHand/dist/css/app.cb5a83b1.css"
   },
   {
     "revision": "719ea4c5c8cf59fb5d6f5c6ab326b919",
     "url": "/MageHand/dist/img/icon-image.719ea4c5.png"
   },
   {
-    "revision": "9835625b1399af61ad94bd185250c784",
+    "revision": "4cc12b4ed94a4ec38a482ecd8fa2d39a",
     "url": "/MageHand/dist/index.html"
   },
   {
-    "revision": "8137c15e6ae956cc2ce3",
-    "url": "/MageHand/dist/js/app.b7a6f656.js"
+    "revision": "bd579de107fe04b56260",
+    "url": "/MageHand/dist/js/app.31a0b8c4.js"
   },
   {
     "revision": "1fee6dd5029155d5b695",

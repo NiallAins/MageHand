@@ -31,9 +31,9 @@ export default {
     this.saveData();
   },
 
-  toggleItemParam: function(type, itemIndex, param) {
+  toggleItemParam: function(type, itemIndex, param, value) {
     let item = this.data[type].find(i => i.index === itemIndex);
-    item[param] = !item[param];
+    item[param] = (typeof value !== 'undefined' ? value : !item[param]);
     this.saveData();
   },
 

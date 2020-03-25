@@ -2,12 +2,16 @@
   <div class="item-row">
     <i class="icon-more" @click="$emit('moreclick', item.index)"></i>
     <h4 :class="{
-      'sm-width': item.ac || item.attack,
-      'md-width': typeof item.level !== 'undefined'
+      'sm-width': item.ac || item.attack || item.quantity || item.quantity === 0,
+      'md-width': typeof item.level !== 'undefined',
+      'disable': item.quantity === 0
     }">
-      {{ item.index.replace(/-/g, ' ') }}
+      <span class="name">{{ item.index.replace(/-/g, ' ') }}</span>
+      <span class="quantity" v-if="item.quantity > 1">
+        <span class="times"> &times;</span>{{ item.quantity }}
+      </span>
     </h4>
-    <p v-if="!editmode && (item.attack || item.ac || typeof item.level !== 'undefined')">
+    <p v-if="!editmode && (item.attack || item.ac || item.ammo || typeof item.level !== 'undefined')">
       {{ item.attack }}
       {{ item.ac ? 'AC ' + item.ac : '' }}
       {{ item.level === 0 ? 'Cantrip' : '' }}
@@ -21,6 +25,11 @@
         @click="$emit('removeItem', item.index)"
       ></i>
       <i
+        :class="['icon-prep xs', { 'active': item.prep }]"
+        v-if="editmode && item.level"
+        @click="$emit('togglePrep', item.index)"
+      ></i>
+      <i
         :class="['icon-equip xs', { 'active': item.equip }]"
         v-if="editmode && (item.ac || item.attack)"
         @click="$emit('toggleEquip', item.index)"
@@ -31,9 +40,24 @@
         @click="$emit('toggleProf', item.index)"
       ></i>
       <i
-        :class="['icon-prep xs', { 'active': item.prep }]"
-        v-if="editmode && typeof item.level === 'number'"
-        @click="$emit('togglePrep', item.index)"
+        class="icon-inc xs"
+        v-if="item.quantity || item.quantity === 0"
+        @click="$emit('changeQuantity', 1)"
+        @mousedown="setTouchTimer()"
+        @mouseup="stopTouchTimer()"
+        @mouseleave="stopTouchTimer()"
+        @touchstart="setTouchTimer()"
+        @touchend="stopTouchTimer()"
+      ></i>
+      <i
+        :class="['icon-dec xs', { 'disable': item.quantity === 0 || (item.quantity === 1 && !zeroQuantity)}]"
+        v-if="item.quantity || item.quantity === 0"
+        @click="$emit('changeQuantity', -1)"
+        @mousedown="setTouchTimer()"
+        @mouseup="stopTouchTimer()"
+        @mouseleave="stopTouchTimer()"
+        @touchstart="setTouchTimer()"
+        @touchend="stopTouchTimer()"
       ></i>
     </div>
   </div>
@@ -47,9 +71,23 @@
     props: [
       'item',
       'editmode',
+      'zeroQuantity'
     ],
+    data: function() {
+      return {
+        touchTimer: null
+      }
+    },
     created: function() {
       this.prof = UserData.data.prof;
+    },
+    methods: {
+      setTouchTimer: function() {
+        this.touchTimer = setTimeout(() => this.$emit('quantityHold', this.item), 500);
+      },
+      stopTouchTimer: function() {
+        clearTimeout(this.touchTimer);
+      }
     }
   }
 </script>
@@ -85,6 +123,35 @@
           width: 90px;
         }
       }
+
+      &.disable {
+        opacity: 0.5;
+        text-indent: 5px;
+
+        .name{
+          position: relative;
+          &:after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            right: -5px;
+            left: -5px;
+            border-bottom: 1px solid $c-font;
+          }
+        }
+      }
+    }
+
+    .empty {
+      padding-left: 5px;
+      font-size: 10px;
+      letter-spacing: 2px;
+      font-family: $f-prim;
+    }
+
+    .quantity {
+      line-height: 24px;
+      font-family: $f-prim;
     }
 
     p {
@@ -94,10 +161,10 @@
     i {
       cursor: pointer;
       float: left;
-    }
 
-    i.active {
-      background: $c-sear;
+      &.active {
+        background: $c-sear;
+      }
     }
 
     .i-container {
@@ -106,6 +173,11 @@
       i {
         float: right;
         margin: -10px;
+
+        &.disable {
+          opacity: 0.5;
+          pointer-events: none;
+        }
       }
     }
 

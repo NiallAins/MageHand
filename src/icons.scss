@@ -24,6 +24,7 @@ $thin: false;
   background: inherit;
   transform: scale(0.75);
   margin: -7px;
+  -webkit-tap-highlight-color: transparent;
   
   &.xs {
     transform: scale(0.6);
@@ -288,5 +289,23 @@ $thin: false;
       border-width: 0 2px 2px 0;
       transform: rotate(45deg);
     }
+  }
+
+  &.icon-inc,
+  &.icon-dec {
+    &:before {
+      border: solid #0000;
+      border-width: 20px 12px;
+    }
+  }
+  &.icon-inc:before {
+    top: 3%;
+    left: 25%;
+    border-bottom-color: $c-icon;
+  }
+  &.icon-dec:before {
+    bottom: 3%;
+    right: 25%;
+    border-top-color: $c-icon;
   }
 }

@@ -1,7 +1,5 @@
 - Search
   - Custom items
-  - Incrementer
-  - Toasts
 - Button active highlight
 - Notes
   - Scrolling

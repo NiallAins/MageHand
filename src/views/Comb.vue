@@ -78,7 +78,9 @@
         <itemRow
           v-for="item in equipData[currentTab]"
           :item="item"
+          :zeroQuantity="true"
           @moreclick="currentItem = $event"
+          @changeQuantity="setItemQuantity(item, item.quantity + $event)"
         ></itemRow>
       </div>
     </div>
@@ -190,7 +192,7 @@
       this.baseInit = Math.floor((this.userData.stats[1] - 10) / 2);
 
       this.equipData.spells = this.userData.spells.filter(s => s.prep);
-      this.equipData.weapons = this.userData.equipment.filter(w => w.equip && w.attack);
+      this.equipData.weapons = this.userData.equipment.filter(w => (w.equip && w.attack) || w.ammo);
       this.equipData.features = this.userData.features;
       this.equipData.armour = this.userData.equipment.filter(a => a.equip && a.ac);
 
@@ -215,6 +217,11 @@
       clearSlots: function() {
         Vue.set(this.userData, 'spellSlots', this.userData.spellSlots.map(s => [s[0], 0]));
         UserData.set('spellSlots', this.userData.spellSlots);
+      },
+      setItemQuantity: function(item, value) {
+        value = parseInt(value);
+        item.quantity = value >= 0 ? value : 0;
+        UserData.toggleItemParam('equipment', item.index, 'quantity', value);
       }
     },
     filters: {
