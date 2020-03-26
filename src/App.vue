@@ -129,7 +129,7 @@
     created: function() {
       UserData.loadData();
 
-      if (UserData.new) {
+      if (UserData.data.new) {
         this.showHelp = true;
         UserData.set('new', false);
       }
