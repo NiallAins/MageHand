@@ -174,6 +174,7 @@
     img {
       display: block;
       margin: 0 auto 10px;
+      width: 100%;
     }
 
     button {
