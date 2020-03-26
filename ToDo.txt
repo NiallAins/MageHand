@@ -1,5 +1,3 @@
-- Search
-  - Custom items
-- Button active highlight
-- Notes
-  - Scrolling
+Fix armour dex bonus
+Textbox click area bug
+Allow mobile in-browser

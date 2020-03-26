@@ -1,6 +1,6 @@
 <template>
   <div id="page_notes">
-    <div :class="{ 'page-container' : true, 'openNote': currentNote !== -1 }">
+    <div :class="[ 'page-container', { 'openNote': currentNote !== -1 }]">
       <div class="note-container new-note">
         <button @click="addNote()"> + New Note </button>
       </div>
@@ -33,7 +33,7 @@
           placeholder="Note content...."
         ></textarea>
       </div>
-      <div :class="{ 'modal-delete': true, 'open': modalOpen }">
+      <div :class="['modal-delete', { 'open': modalOpen }]">
         <div class="modal-content">
           <h3> Delete Note? </h3>
           <button @click="modalOpen = false"> Cancel </button>
@@ -105,8 +105,12 @@
     outline-offset: -3px;
   }
 
-  .page-container.openNote .note-container:not(.open) {
-    height: 0;
+  .page-container{
+    padding-bottom: 50px;
+    
+    &.openNote .note-container:not(.open) {
+      height: 0;
+    }
   }
 
   .note-container.new-note {

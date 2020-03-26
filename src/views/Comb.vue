@@ -192,11 +192,11 @@
       this.baseInit = Math.floor((this.userData.stats[1] - 10) / 2);
 
       this.equipData.spells = this.userData.spells.filter(s => s.prep);
-      this.equipData.weapons = this.userData.equipment.filter(w => (w.equip && w.attack) || w.ammo);
+      this.equipData.weapons = this.userData.equipment.filter(w => (w.equip && w.type === 'Weapon') || w.type === 'Ammunition');
       this.equipData.features = this.userData.features;
-      this.equipData.armour = this.userData.equipment.filter(a => a.equip && a.ac);
+      this.equipData.armour = this.userData.equipment.filter(a => a.equip && a.type === 'Armour');
 
-      this.ac = this.equipData.armour.reduce((tot, a) => tot += a.ac, 0);
+      this.ac = this.equipData.armour.reduce((tot, a) => tot += parseInt(a.ac), 0);
       this.ac += this.equipData.armour.some(a => a.prof) ? this.userData.prof : 0;
     },
     methods: {
@@ -540,12 +540,12 @@
       z-index: $z-nav - 1;
       width: calc(100% - #{$w-pad * 2});
       text-align: center;
-
+      
       button {
         width: 180px;
         padding: 8px;
         border: 1px solid $c-border;
-        border-radius: 10px;
+        border-radius: $br-el;
         background: $c-bg;
         font-size: $f-size-md;
       }

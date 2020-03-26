@@ -87,11 +87,21 @@
     components: {
       touchButton
     },
+    props: [
+      'navOpen'
+    ],
     data: function() {
       return {
         userData: {},
         editing: false,
         skillList: {}
+      }
+    },
+    watch: {
+      navOpen: function(open) {
+        if (open && this.editing) {
+          this.toggleEdit();
+        }
       }
     },
     created: function() {

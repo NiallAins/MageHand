@@ -21,14 +21,17 @@
         <div class="scroll-container">
           <div class="scroll-container-child">
             <ul v-if="type === 'spells'">
-              <li>
+              <li v-if="info.school">
                 {{ info.level === 0 ? 'Cantrip of' : 'Level ' + info.level + ' Spell' }}
                 {{ info.school.name }}
               </li>
-              <li> Uses {{ info.components.map(c => spellComponents[c]).join(', ') }} </li>
+              <li v-if="!info.school">
+                {{ info.level }}
+              </li>
+              <li v-if="info.components"> Uses {{ info.components.map(c => spellComponents[c]).join(', ') }} </li>
               <li v-if="info.range === 'Self'"> Affects self </li>
-              <li v-else> Range of <span class="l-case">{{ info.range }}</span> </li>
-              <li>
+              <li v-if="info.range"> Range of <span class="l-case">{{ info.range }}</span> </li>
+              <li v-if="info.casting_time">
                 Takes <span class="l-case">{{ info.casting_time }}</span>,
                 <span v-if="info.duration === 'Instantaneous'"> affects instantaneously </span>
                 <span v-else class="l-case"> lasts {{ info.duration }} </span>
@@ -41,19 +44,19 @@
             <ul v-if="type === 'equipment'">
               <li>
                 {{ info[equipCategories[info.equipment_category]] }}
-                <span v-if="info.equipment_category === 'Armor'">
+                <span v-if="info.type === 'Armor' || info.equipment_category === 'Armor'">
                   Armor
                 </span>
-                <span v-if="info.equipment_category === 'Weapon'">
-                  {{ info.weapon_range }} Weapon
+                <span v-if="info.type === 'Weapon' || info.equipment_category === 'Weapon'">
+                  {{ info.weapon_range || '' }} Weapon
                 </span>
               </li>
 
-              <div v-if="info.equipment_category === 'Weapon'">
+              <div v-if="info.type === 'Weapon' || info.equipment_category === 'Weapon'">
                 <li>
-                  {{ info.damage.damage_dice }} {{ info.damage.damage_type.name }}
+                  {{ info.attack || (info.damage.damage_dice + ' ' + info.damage.damage_type.name) }}
                 </li>
-                <li>
+                <li v-if="info.range">
                   Range of
                   {{ info.range.normal }}
                   ft{{ info.range.long ? ', ' + info.range.long + ' ft long' : '' }}
@@ -63,17 +66,20 @@
                   {{ info.throw_range.normal }}
                   ft{{ info.throw_range.long ? ', ' + info.throw_range.long + ' ft long' : '' }}
                 </li>
-                <li v-if="info.properties.length > 0">
+                <li v-if="info.properties && info.properties.length > 0">
                   {{ info.properties.map(i => i.name).join(', ') }}
                 </li>
               </div>
 
-              <div v-if="info.equipment_category === 'Armor'">
-                <li>
+              <div v-if="info.type === 'Armour' || info.equipment_category === 'Armor'">
+                <li v-if="info.armor_class">
                   AC {{ info.armor_class.base }}{{ info.armor_class.dex_bonus ? ' + Dex' : '' }}
                   <span v-if="info.armor_class.max_bonus">
                     (max bonus {{ info.armor_class.max_bonus }})
                   </span>
+                </li>
+                <li v-if="info.ac">
+                  AC {{ info.ac }}
                 </li>
                 <li v-if="info.str_minimum"> Min Str {{ info.str_minimum }} </li>
                 <li v-if="info.stelth_disadvantage"> Stealth Disadvantage </li>
@@ -101,7 +107,7 @@
               </li>
             </ul>
 
-            <ul v-if="type === 'features'">
+            <ul v-if="type === 'features' && info.level">
               <li> Level {{ info.level }} {{ info.class.name }} </li>
             </ul>
 
@@ -168,7 +174,7 @@
         'pp': 'platinum',
         'ep': 'electrum'
       };
-      this.customItems = [
+      this.extraItems = [
         {
           "name": "gold piece",
           "index": "gold-piece",
@@ -236,21 +242,27 @@
         if (this.itemindex) {
           this.info = null;
           this.fadeIn = true;
-          let customItemIndex = this.customItems.findIndex(i => i.index === this.itemindex);
-          if (customItemIndex > -1) {
-            this.info = this.customItems[customItemIndex];
-            this.canAdd = UserData.data[this.type].findIndex(i => i.index === this.info.index) === -1;
+          let possibleCustomItem = UserData.data[this.type].find(i => i.index === this.itemindex);
+          if (possibleCustomItem && possibleCustomItem.custom) {
+            this.info = possibleCustomItem;
+            this.canAdd = false;
           } else {
-            let ajax = new XMLHttpRequest(),
-                url = `https://www.dnd5eapi.co/api/${this.type}/${this.itemindex}`;
-            ajax.onload = () => {
-              if (ajax.status >= 200 && ajax.status < 300) {
-                this.info = JSON.parse(ajax.responseText);
-                this.canAdd = UserData.data[this.type].findIndex(i => i.index === this.info.index) === -1;
-              }
-            };
-            ajax.open('GET', url);
-            ajax.send();
+            let extraItemIndex = this.extraItems.findIndex(i => i.index === this.itemindex);
+            if (extraItemIndex > -1) {
+              this.info = this.extraItems[extraItemIndex];
+              this.canAdd = UserData.data[this.type].findIndex(i => i.index === this.info.index) === -1;
+            } else {
+              let ajax = new XMLHttpRequest(),
+                  url = `https://www.dnd5eapi.co/api/${this.type}/${this.itemindex}`;
+              ajax.onload = () => {
+                if (ajax.status >= 200 && ajax.status < 300) {
+                  this.info = JSON.parse(ajax.responseText);
+                  this.canAdd = UserData.data[this.type].findIndex(i => i.index === this.info.index) === -1;
+                }
+              };
+              ajax.open('GET', url);
+              ajax.send();
+            }
           }
         } else {
           this.info = null;
@@ -280,6 +292,14 @@
             index: item.index
           };
           if (this.type === 'equipment') {
+            newItem.type = 'Item';
+            if (item.gear_category === 'Ammunition') {
+              newItem.type = 'Ammunition';
+            } else if (item.damage) {
+              newItem.type = 'Weapon';
+            } else if (item.armor_class) {
+              newItem.type = 'Armour';
+            }
             newItem.equip = false;
             newItem.prof = false;
             if (item.damage) {
@@ -288,9 +308,6 @@
               newItem.ac = item.armor_class.base;
             } else {
               newItem.quantity = parseInt(quantity);
-            }
-            if (item.gear_category === 'Ammunition') {
-              newItem.ammo = true;
             }
           } else if (this.type === 'spells') {
             newItem.prep = false;

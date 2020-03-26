@@ -7,11 +7,11 @@
         type="text"
         v-model="userData.name"
         :style="{ 'font-size': userData.name.length < 15 ? '26px' : (userData.name.length < 24 ? '20px' : '16px') }"
-      >
+      />
       <div class="level">
         <touchButton v-if="editing" @press="editing && userData.level > 1 ? userData.level-- : ''"> - </touchButton>
         <touchButton v-if="editing" @press="editing ? userData.level++ : ''"> + </touchButton>
-        <h3>Lvl</h3>
+        <h3> Lvl </h3>
         <h2> {{ userData.level }} </h2>
       </div>
     </div>
@@ -151,6 +151,9 @@
       dropdown,
       touchButton
     },
+    props: [
+      'navOpen'
+    ],
     data: function() {
       return {
         userData: {},
@@ -159,6 +162,13 @@
     },
     created: function() {
       this.userData = UserData.data;
+    },
+    watch: {
+      navOpen: function(open) {
+        if (open && this.editing) {
+          this.toggleEdit();
+        }
+      }
     },
     methods: {
       toggleEdit: function() {

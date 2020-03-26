@@ -75,8 +75,14 @@
       </div>
     </div>
 
+    <div class="btn-custom">
+      <button @click="customModalOpen = true">
+        Add Custom {{ tabSingle[listType] }}
+      </button>
+    </div>
+
     <div
-      :class="['modal-bg quantity-bg', { 'open': quantityModalItem }]"
+      :class="['modal-bg dark-bg', { 'open': quantityModalItem }]"
       @click="quantityModalItem = null"
     ></div>
     <div
@@ -94,6 +100,93 @@
         :value="quantityModalItem.quantity"
         @blur="setItemQuantity(quantityModalItem, $event.target.value)"
       />
+    </div>
+
+    <div
+      :class="['modal-bg dark-bg', { 'open': customModalOpen }]"
+      @click="closeCustomModal()"
+    ></div>
+    <div :class="['custom-modal', { 'open': customModalOpen }]">
+      <button class="btn-close" @click="closeCustomModal()">
+        <i class="icon-close"></i>
+      </button>
+      <h3> Add Custom {{ tabSingle[listType] }} </h3>
+      <input
+        v-model="customObject.name"
+        type="text"
+        placeholder="Name..."
+      />
+      <dropdown
+        v-if="listType === 'spells'"
+        v-model="customObject.spell_level"
+        placeholder="Spell Level..."
+        :options="[
+          'Cantrip',
+          'Level 1',
+          'Level 2',
+          'Level 3',
+          'Level 4',
+          'Level 5',
+          'Level 6',
+          'Level 7',
+          'Level 8',
+          'Level 9'
+        ]"
+        :noCustom="true"
+      ></dropdown>
+      <div v-if="listType === 'equipment'">
+        <dropdown
+          v-model="customObject.equip_type"
+          placeholder="Type..."
+          :noCustom="true"
+          :options="[
+            'Weapon',
+            'Ammunition',
+            'Armour',
+            'Item'
+          ]"
+        ></dropdown>
+        <div class="damages" v-if="customObject.equip_type === 'Weapon'">
+          <input
+            type="text"
+            v-model="customObject.damage_die"
+            placeholder="Damge Dice..."
+          />
+          <dropdown
+            v-model="customObject.damage_type"
+            placeholder="Damage Type..."
+            :options="[
+              'acid',
+              'bludgeoning',
+              'cold',
+              'fire',
+              'force',
+              'lightning',
+              'necrotic',
+              'piercing',
+              'poison',
+              'psychic',
+              'radiant',
+              'slashing',
+              'thunder'
+            ]"
+          ></dropdown>
+        </div>
+        <input
+          type="text"
+          class="ac"
+          v-if="customObject.equip_type === 'Armour'"
+          v-model="customObject.ac"
+          placeholder="Armour Class..."
+        />
+      </div>
+      <textbox
+        v-model="customObject.desc"
+        :placeholder="(customObject.equip_type || tabSingle[listType]) + ' Description...'"
+      ></textbox>
+      <div class="btn-container">
+        <button @click="saveCustomItem()"> Save {{ tabSingle[listType] }} </button>
+      </div>
     </div>
   
     <div :class="['toast', { 'open': toastContent }]">
@@ -114,12 +207,16 @@
   import searchData from '../searchData';
   import itemRow from '../components/itemRow';
   import itemInfo from '../components/itemInfo';
+  import dropdown from '../components/dropdown';
+  import textbox from '../components/textbox';
 
   export default {
     name: 'Sear',
     components: {
       itemRow,
-      itemInfo
+      itemInfo,
+      dropdown,
+      textbox
     },
     data: function() {
       return {
@@ -128,17 +225,32 @@
         listType: 'spells',
         currentItem: '',
         quantityModalItem: null,
+        customModalOpen: null,
+        customObject: {
+          name: '',
+          desc: '',
+          equip_type: '',
+          damage_die: '',
+          damge_type: '',
+          ac: '',
+          spell_level: ''
+        },
         toastContent: '',
         toastTimeout: null,
-        tabs: ['spells', 'features', 'equipment']
       }
     },
     created: function() {
       this.userData = UserData.data;
+      this.tabs = ['spells', 'features', 'equipment'];
       this.lists = {
         'spells': searchData.spells,
         'features': searchData.features,
         'equipment': searchData.equipment
+      };
+      this.tabSingle = {
+        spells: 'Spell',
+        features: 'Feature',
+        equipment: 'Equipment'
       }
     },
     methods: {
@@ -176,215 +288,400 @@
         this.toastContent = msg;
         clearTimeout(this.toastTimeout);
         this.toastTimeout = setTimeout(() => this.toastContent = '', 1600);
+      },
+      saveCustomItem: function() {
+        let customIndex = this.customObject.name.replace(/[^a-z0-9]/gi, '-');
+        if (UserData.data[this.listType].findIndex(i => i.index === customIndex) !== -1) {
+          this.setToast('Name Already in Use');
+          return;
+        }
+        if (!this.customObject.name) {
+          this.setToast('Missing Name');
+          return;
+        }
+        if (this.listType === 'spells' && !this.customObject.spell_level) {
+          this.setToast('Missing Spell Level');
+          return;
+        }
+        if (this.listType === 'equipment') {
+          if (!this.customObject.equip_type) {
+            this.setToast('Missing Equipment Type');
+            return;
+          }
+          if (this.customObject.equip_type === 'Weapon' && !this.customObject.damage_die) {
+            this.setToast('Missing Damage');
+            return;
+          }
+          if (this.customObject.equip_type === 'Armour' && !this.customObject.ac) {
+            this.setToast('Missing Armour Class');
+            return;
+          }
+        }
+
+        let newItem = {
+          custom: true,
+          index: customIndex,
+          name: this.customObject.name,
+          desc: [this.customObject.desc]
+        };
+        if (this.listType === 'equipment') {
+          newItem.type = this.customObject.equip_type;
+          newItem.equip = false;
+          newItem.prof = false;
+          if (this.customObject.equip_type === 'Weapon') {
+            newItem.attack = this.customObject.damage_die;
+            if (this.customObject.damage_type) {
+              newItem.attack += ' ' + this.customObject.damage_type;
+            };
+          } else if (this.customObject.equip_type === 'Armour') {
+            newItem.ac = this.customObject.ac;
+          } else {
+            newItem.quantity = 1;
+          }
+          if (this.customObject.equip_type === 'Ammunition') {
+            newItem.ammo = true;
+          }
+        } else if (this.listType === 'spells') {
+          newItem.prep = false;
+          newItem.level = this.customObject.spell_level;
+        }
+        UserData.setItem(this.listType, newItem);
+        this.closeCustomModal();
+      },
+      closeCustomModal: function() {
+        this.customModalOpen = false;
+        for (let prop in this.customObject) {
+          this.customObject[prop] = '';
+        }
       }
     }
   };
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
   @import '../vars.scss';
 
   $c-prim: $c-sear;
 
-  .tabs {
-    position: absolute;
-    z-index: $z-dropdown;
-    left: 0;
-    right: 0;
-    padding: 0 $w-pad;
-    border-bottom: 1px solid $c-border;
-
-    .tab-container {
-      max-width: $w-max;
-      margin: 0 auto;
-    
-      div {
-        width: calc(33% - 2px);
-        float: left;
-        border: 1px solid $c-border;
-        border-radius: $br-el $br-el 0 0;
-        margin: 0 -1px -1px 0;
-        text-indent: 10%;
-        background: $c-bg-tab;
-        
-        &.open {
-          border-bottom-color: $c-bg;
-          background: $c-bg;
-        }
-        
-        h3 {
-          font-size: 18px;
-          line-height: 40px;
-        }
-      }
-    }
-  }
-
-  .autocomplete {
-    position: relative;
-    padding-top: 70px;
-    
-    input, .autocomplete {
-      width: calc(100% - #{($w-pad * 2) + 1});
-    }
-
-    input[type=text]:focus {
-      outline: 2px solid $c-prim;
-    }
-    
-    .clear-search {
+  #page_sear {
+    .tabs {
       position: absolute;
-      top: 77px;
-      right: 10px;
-      z-index: 1;
-      font-size: 25px;
-      cursor: pointer;
-    }
-    
-    .autocomplete-list {
-      position: absolute;
-      top: 100%;
+      z-index: $z-dropdown;
       left: 0;
       right: 0;
-      z-index: $z-dropdown;
-      max-height: 192px;
-      border: solid $c-border;
-      border-width: 0px 1px 1px 1px;
-      overflow: auto;
-      background: $c-bg;
-      text-transform: capitalize;
-      @include scrollbar;
+      padding: 0 $w-pad;
+      border-bottom: 1px solid $c-border;
+
+      .tab-container {
+        max-width: $w-max;
+        margin: 0 auto;
       
-      li {
-        padding: 5px $w-pad;
-        font-size: $f-size-bg;
-        line-height: 20px;
-        
-        &:hover {
-          background-color: $c-bg-light;
+        div {
+          width: calc(33% - 2px);
+          float: left;
+          border: 1px solid $c-border;
+          border-radius: $br-el $br-el 0 0;
+          margin: 0 -1px -1px 0;
+          text-indent: 10%;
+          background: $c-bg-tab;
+          
+          &.open {
+            border-bottom-color: $c-bg;
+            background: $c-bg;
+          }
+          
+          h3 {
+            font-size: 18px;
+            line-height: 40px;
+          }
         }
       }
     }
-  }
 
-  .toast {
-    position: fixed;
-    bottom: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: $z-dropdown;
-    width: 180px;
-    height: 22px;
-    line-height: 22px;
-    padding: 5px 20px;
-    border-radius: $br-el;
-    text-align: center;
-    opacity: 0;
-    transition:
-      opacity $l-ani-dd,
-      bottom 0s ease $l-ani-dd;
-    box-shadow: 0 4px 8px 2px $c-mod-bg;
-
-    &.open {
-      bottom: 50px;
-      opacity: 0.9;
-      transition:
-        opacity $l-ani-dd,
-        bottom $l-ani-dd;
-    }
-  }
-
-  .quantity-modal {
-    position: fixed;
-    top: 50%;
-    left: calc(50% - 136px);
-    z-index: $z-modal;
-    transform: translateY(-50%);
-    width: 250px;
-    padding: 10px;
-    border: 1px solid $c-border;
-    border-radius: $br-mod 0;
-    background: $c-bg;
-    opacity: 0;
-
-    &.open {
-      transition: opacity $l-ani-mod;
-      opacity: 1;
-    }
-
-    button {
-      position: absolute;
-      top: 6px ;
-      right: 0px;
-      text-align: left;
-      border: none;
-    }
-
-    h3 {
-      padding: 0 45px 0 10px;
-      line-height: 42px;
-      font-size: 18px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    p {
-      text-align: center;
-      margin: 0;
-    }
-
-    input {
-      display: block;
-      width: 50px;
-      padding: 10px;
-      border: 1px solid $c-border;
-      margin: 10px auto;
-      color: $c-font;
-      font-size: 18px;
-      font-family: $f-prim;
-      text-align: right;
-      background: $c-bg;
-
-      &::-webkit-outer-spin-button,
-      &::-webkit-inner-spin-button {
-        -webkit-appearance: none;
-        margin: 0;
+    .autocomplete {
+      position: relative;
+      padding-top: 70px;
+      
+      input, .autocomplete {
+        width: calc(100% - #{($w-pad * 2) + 1});
       }
-      -moz-appearance: textfield;
 
-      &:focus {
+      input[type=text]:focus {
         outline: 2px solid $c-prim;
       }
+      
+      .clear-search {
+        position: absolute;
+        top: 77px;
+        right: 10px;
+        z-index: 1;
+        font-size: 25px;
+        cursor: pointer;
+      }
+      
+      .autocomplete-list {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        z-index: $z-dropdown;
+        max-height: 192px;
+        border: solid $c-border;
+        border-width: 0px 1px 1px 1px;
+        overflow: auto;
+        background: $c-bg;
+        text-transform: capitalize;
+        @include scrollbar;
+        
+        li {
+          padding: 5px $w-pad;
+          font-size: $f-size-bg;
+          line-height: 20px;
+          
+          &:hover {
+            background-color: $c-bg-light;
+          }
+        }
+      }
     }
-  }
 
-  .modal-bg {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    z-index: $z-dropdown - 1;
-    height: 0;
+    .btn-custom {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 20px;
+      z-index: $z-dropdown;
+      text-align: center;
 
-    &.quantity-bg {
-      background: $c-mod-bg;
+      button {
+        width: 190px;
+        padding: 8px;
+        border: 1px solid $c-border;
+        border-radius: $br-el;
+        background: $c-bg;
+        font-size: $f-size-md;
+      }
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: $z-modal + 1;
+      width: 180px;
+      height: 22px;
+      line-height: 22px;
+      padding: 5px 20px;
+      border-radius: $br-el;
+      border: 1px solid #fff1;
+      text-align: center;
+      background: $c-bg;
       opacity: 0;
+      pointer-events: none;
+      transition:
+        opacity $l-ani-dd,
+        bottom 0s ease $l-ani-dd;
+      box-shadow: 0 4px 8px 2px $c-mod-bg;
+
+      &.open {
+        bottom: 80px;
+        opacity: 1;
+        transition:
+          opacity $l-ani-dd,
+          bottom $l-ani-dd;
+      }
     }
 
-    &.open {
-      height: 100vh;
-      opacity: 1;
-      transition: opacity $l-ani-mod;
+    .quantity-modal,
+    .custom-modal {
+      position: fixed;
+      z-index: $z-modal;
+      padding: 10px;
+      border: 1px solid $c-border;
+      border-radius: $br-mod 0;
+      background: $c-bg;
+      opacity: 0;
+
+      &.open {
+        transition: opacity $l-ani-mod;
+        opacity: 1;
+      }
+
+      .btn-close {
+        position: absolute;
+        top: 6px ;
+        right: 0px;
+        text-align: left;
+        border: none;
+      }
+
+      h3 {
+        padding: 0 45px 0 10px;
+        line-height: 42px;
+        font-size: 18px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      p {
+        text-align: center;
+        margin: 0;
+      }
+
+      input[type="number"] {
+        display: block;
+        width: 50px;
+        padding: 10px;
+        border: 1px solid $c-border;
+        margin: 10px auto;
+        color: $c-font;
+        font-size: 18px;
+        font-family: $f-prim;
+        text-align: right;
+        background: $c-bg;
+
+        &::-webkit-outer-spin-button,
+        &::-webkit-inner-spin-button {
+          -webkit-appearance: none;
+          margin: 0;
+        }
+        -moz-appearance: textfield;
+
+        &:focus {
+          outline: 2px solid $c-prim;
+        }
+      }
     }
-  }
 
-  .scroll-container-child {
-    padding-bottom: 50px;
-    height: calc(100vh - 240px);
+    .quantity-modal {
+      top: -100vh;
+      left: calc(50% - 136px);
+      transform: translateY(-50%);
+      width: 250px;
 
-    .item-row {
-      width: calc(100% + 10px);
+      &.open {
+        top: 50%;
+      }
+    }
+
+    .custom-modal {
+      top: -100vh;
+      height: calc(100vh - #{22 + (2 * $w-pad)});
+      width: calc(100vw - #{22 + (2 * $w-pad)});
+      max-width: #{$w-max - (2 * $w-pad)};
+
+      h3 {
+        margin-bottom: 20px;
+      }
+
+      &.open {
+        top: $w-pad;
+      }
+
+      input:focus,
+      .textbox.focus {
+        outline: 2px solid $c-prim;
+      }
+
+      .textbox {
+        min-height: 80px;
+        margin-top: 30px;
+        clear: both;
+      }
+
+      input,
+      input[type="text"] {
+        display: block;
+        width: calc(100% - #{2 + ($w-pad * 2)});
+        margin: 10px 0;
+        font-size: 17px;
+      }
+
+      .damages {
+        &>input {
+          width: calc(50% - #{$w-pad + 15});
+          min-width: 116px;
+          margin: 0 10px 10px 0;
+        }
+
+        &>input,
+        .dropdown {
+          float: left;
+          margin-top: 0;
+
+          input[type="text"] {
+            margin-top: 0;
+            margin-bottom: 0;
+          }
+        }
+
+        .dropdown {
+          margin-bottom: 20px;
+        }
+      }
+
+      .dropdown {
+        width: calc(50% - 5px);
+        min-width: 134px;
+
+        input {
+          text-transform: capitalize;
+        }
+      }
+
+      input[type="text"].ac {
+        width: calc(50% - #{$w-pad + 15});
+        min-width: 116px;
+      }
+
+      .btn-container {
+        position: absolute;
+        right: 20px;
+        bottom: 0;
+        left: 20px;
+        padding: 20px 0;
+        text-align: center;
+        background: $c-bg;
+
+        button {
+          width: 200px;
+          padding: 8px 10px;
+          border: 1px solid $c-border;
+          border-radius: $br-el;
+          font-size: 16px;
+        }
+      }
+    }
+
+    .modal-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: $z-dropdown - 1;
+      height: 0;
+
+      &.dark-bg {
+        background: $c-mod-bg;
+        opacity: 0;
+      }
+
+      &.open {
+        height: 100vh;
+        opacity: 1;
+        transition: opacity $l-ani-mod;
+      }
+    }
+
+    .scroll-container-child {
+      padding-bottom: 50px;
+      height: calc(100vh - 240px);
+
+      .item-row {
+        width: calc(100% + 10px);
+      }
     }
   }
 </style>

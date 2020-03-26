@@ -26,7 +26,7 @@
       ></i>
       <i
         :class="['icon-prep xs', { 'active': item.prep }]"
-        v-if="editmode && item.level"
+        v-if="editmode && (item.level || item.level === 0)"
         @click="$emit('togglePrep', item.index)"
       ></i>
       <i
@@ -101,12 +101,13 @@
 
     h4, p {
       float: left;
+      width: 135px;
       line-height: 48px;
       margin: 0;
       overflow: hidden;
       white-space: nowrap;
       text-overflow: ellipsis;
-      width: 135px;
+      text-transform: capitalize;
     }
 
     h4 {

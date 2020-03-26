@@ -10,8 +10,8 @@
       <button @click="showPrompt()"> Install Mage Hand </button>
     </div>
     <main>
-      <Prof v-if="currentView === 'prof'"></Prof>
-      <Stat v-if="currentView === 'stat'"></Stat>
+      <Prof v-if="currentView === 'prof'" :navOpen="navOpen"></Prof>
+      <Stat v-if="currentView === 'stat'" :navOpen="navOpen"></Stat>
       <Sear v-if="currentView === 'sear'"></Sear>
       <Comb v-if="currentView === 'comb'"></Comb>
       <Note v-if="currentView === 'note'"></Note>
@@ -151,17 +151,17 @@
   
   $w-nav-item: 64px;
 
-  // @media (max-width: $w-max) and (display-mode: browser) {
-  //   main {
-  //     display: none;
-  //   }
-  // }
+  @media (max-width: $w-max) and (display-mode: browser) {
+    main {
+      display: none;
+    }
+  }
 
-  // @media (min-width: $w-max), (display-mode: standalone), (display-mode: fullscreen) {
+  @media (min-width: $w-max), (display-mode: standalone), (display-mode: fullscreen) {
     .install-prompt {
       display: none;
     }
-  // }
+  }
 
   .install-prompt {
     position: fixed;

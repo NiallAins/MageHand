@@ -26,6 +26,14 @@ export default {
       this.data[type].sort((a, b) => a.index - b.index);
       if (type === 'spells') {
         this.data[type].sort((a, b) => a.level - b.level);
+      } else if (type === 'equipment') {
+        let sortOrder = {
+          'Armour': 0,
+          'Weapon': 1,
+          'Ammunition': 2,
+          'Item': 3
+        }
+        this.data[type].sort((a, b) => sortOrder[a.type] - sortOrder[b.type]);
       }
     }
     this.saveData();
