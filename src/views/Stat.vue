@@ -62,8 +62,8 @@
     </div>
     <div class="stat-box bottom-box font-sm">
       <div>
-        <touchButton v-if="editing" @press="userData.maxHp--"> - </touchButton>
-        <touchButton v-if="editing" @press="userData.maxHp++"> + </touchButton>
+        <touchButton v-if="editing" @press="setMaxHealth(-1)"> - </touchButton>
+        <touchButton v-if="editing" @press="setMaxHealth(1)"> + </touchButton>
         <h4> Max <br/> Health</h4>
         <h3 :class="{ 'font-sm': editing }"> {{ userData.maxHp }} </h3>
       </div>
@@ -151,7 +151,8 @@
             'profSkills': this.userData.profSkills,
             'speed': this.userData.speed,
             'prof': this.userData.prof,
-            'maxHp': this.userData.maxHp
+            'maxHp': this.userData.maxHp,
+            'hp': this.userData.hp
           });
         }
       },
@@ -169,6 +170,13 @@
       setStat: function(stat, increase) {
         let value = this.userData.stats[stat] + (increase ? 1 : -1);
         Vue.set(this.userData.stats, stat, value);
+      },
+      setMaxHealth: function(value) {
+        this.userData.maxHp = Math.max(this.userData.maxHp + value, 1);
+        if (value > 0) {
+          this.userData.hp += value;
+        }
+        this.userData.hp = Math.min(this.userData.hp, this.userData.maxHp);
       }
     },
     filters: {

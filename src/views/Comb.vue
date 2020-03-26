@@ -299,11 +299,11 @@
           left: -45px;
         }
         
-        &:focus {
-          outline: none;
-          line-height: 36px;
-          border: 3px solid $c-prim;
-        }
+        // &:focus {
+        //   outline: none;
+        //   line-height: 36px;
+        //   border: 3px solid $c-prim;
+        // }
       }
     }
 
@@ -352,14 +352,14 @@
       border-radius: 100%;
       vertical-align: middle;
 
+      &.slot.on {
+        background: $c-prim;
+      }
       &.succ.on {
         background: $c-success;
       }
       &.fail.on {
         background: $c-failure;
-      }
-      &.slot.on {
-        background: $c-prim;
       }
     }
 
@@ -592,14 +592,14 @@
             background: none;
             border: none;
             
-            &:focus {
-              outline: none;
-              top: 52px;
+            // &:focus {
+            //   outline: none;
+            //   top: 52px;
               
-              span {
-                border: 3px solid $c-prim;
-              }
-            }
+            //   span {
+            //     border: 3px solid $c-prim;
+            //   }
+            // }
             
             span {
               display: inline-block;
