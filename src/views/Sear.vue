@@ -89,7 +89,7 @@
       :class="['quantity-modal', { 'open': quantityModalItem }]"
       v-if="quantityModalItem"
     >
-      <button @click="quantityModalItem = null">
+      <button class="btn-close" @click="quantityModalItem = null">
         <i class="icon-close"></i>
       </button>
       <h3> {{ quantityModalItem.index.replace(/-/g, ' ') }} </h3>
