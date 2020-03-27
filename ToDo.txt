@@ -1,6 +1,26 @@
-Fix armour dex bonus
-Textbox click area bug
+GEN
+stop touch highlight on all elements (stats page)
 Allow mobile in-browser
 Standarise button focus/active
+
+STATS
 Fix stats skills layout
-Adding to max health, adds to health
+
+COMB
+persist initiative roll
+
+SEAR
+Push scroll container above add custom button
+armour, weapon, ammo, item seperators
+
+ITEMINFO
+fix item info scroll container on mobile
+add class features to features
+
+ITEMROW
+prevent quantity overflow
+spell lvl in search
+full width combat features
+
+TEXTBOX
+Textbox click area bug
