@@ -17,11 +17,10 @@
       {{ item.level === 0 ? 'Cantrip' : '' }}
       {{ item.level > 0 ? 'Lvl '+ item.level : '' }}
       <span
-        v-if="item.bonus || (item.prof && item.type === 'Weapon')"
         class="prof-bonus"
-      >
-        +{{ item.bonus || prof }}
-      </span>
+        v-if="item.bonus || (item.prof && item.type === 'Weapon')"
+      >+{{ item.bonus || prof }}</span>
+      <span class="dis-adv" v-if="item.type === 'Armour' && !item.prof">Dis</span>
     </p>
     <div class="i-container">
       <i
@@ -194,6 +193,15 @@
       margin-left: 6px;
       font-size: 14px;
       background: $c-comb;
+    }
+
+    .dis-adv {
+      vertical-align: 1px;
+      padding: 3px 5px;
+      border-radius: 8px;
+      margin-left: 6px;
+      font-size: 14px;
+      background: $c-stat;
     }
   }
 </style>
