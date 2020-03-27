@@ -172,13 +172,29 @@
             ]"
           ></dropdown>
         </div>
-        <input
-          type="text"
-          class="ac"
-          v-if="customObject.equip_type === 'Armour'"
-          v-model="customObject.ac"
-          placeholder="Armour Class..."
-        />
+        <div v-if="customObject.equip_type === 'Armour'">
+          <input
+            type="number"
+            class="ac"
+            v-model="customObject.ac"
+            placeholder="AC..."
+          />
+          <div class="dex-bonus">
+            <div class="checkbox">
+              <input
+                id="dex_bonus"
+                type="checkbox"
+                v-model="customObject.dex_bonus"
+              />
+              <label for="dex_bonus"> Dex Bonus </label>
+            </div>
+            <input
+              type="number"
+              v-model="customObject.max_dex"
+              placeholder="Max Bonus..."
+            />
+          </div>
+        </div>
       </div>
       <textbox
         v-model="customObject.desc"
@@ -233,6 +249,8 @@
           damage_die: '',
           damge_type: '',
           ac: '',
+          dex_bonus: false,
+          max_dex: null,
           spell_level: ''
         },
         toastContent: '',
@@ -335,6 +353,13 @@
             };
           } else if (this.customObject.equip_type === 'Armour') {
             newItem.ac = this.customObject.ac;
+            if (this.customObject.dex_bonus) {
+              newItem.dex_bonus = true;
+
+              if (this.customObject.max_dex) {
+                newItem.max_dex = this.customObject.max_dex;
+              }
+            }
           } else {
             newItem.quantity = 1;
           }
@@ -631,9 +656,76 @@
         }
       }
 
-      input[type="text"].ac {
-        width: calc(50% - #{$w-pad + 15});
+      input[type="number"].ac {
+        width: calc(50% - #{$w-pad + 19});
         min-width: 116px;
+        margin: 0;
+        text-align: left;
+        padding: 0 10px;
+        line-height: 34px;
+      }
+
+      .dex-bonus {
+        overflow: auto;
+
+        input[type="number"] {
+          float: left;
+          text-align: left;
+          line-height: 34px;
+          padding: 0 10px;
+          margin: 10px 0 0 15px;
+          width: 110px;
+        }
+
+        .checkbox {
+          float: left;
+          margin: 10px 0;
+          line-height: 34px;
+
+          input {
+            display: inline-block;
+            width: 0;
+            height: 0;
+            margin: 0;
+            padding: 0;
+            visibility: hidden;
+          }
+
+          label {
+            position: relative;
+            top: 1px;
+            padding: 0 38px 0 10px;
+
+            &:before {
+              content: '';
+              position: absolute;
+              top: -5px;
+              right: -40px;
+              width: 27px;
+              height: 27px;
+              border: 1px solid $c-border;
+              border-radius: $br-el;
+            }
+
+            &:after {
+              content: '';
+              position: absolute;
+              top: 0px;
+              right: -35px;
+              width: 19px;
+              height: 19px;
+              border-radius: $br-el;
+            }
+          }
+
+          input:focus+label:before {
+            outline: 2px solid $c-prim;
+          }
+
+          input:checked+label:after {
+              background: $c-border;
+          }
+        }
       }
 
       .btn-container {

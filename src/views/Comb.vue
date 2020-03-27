@@ -196,8 +196,15 @@
       this.equipData.features = this.userData.features;
       this.equipData.armour = this.userData.equipment.filter(a => a.equip && a.type === 'Armour');
 
-      this.ac = this.equipData.armour.reduce((tot, a) => tot += parseInt(a.ac), 0);
-      this.ac += this.equipData.armour.some(a => a.prof) ? this.userData.prof : 0;
+      let dex = Math.floor((this.userData.stats[1] - 10) / 2);
+      this.ac = this.equipData.armour.reduce((tot, a) => {
+        let ac = parseInt(a.ac);
+        if (a.dex_bonus) {
+          a.bonus = a.max_dex ? Math.min(a.max_dex, dex) : dex;
+          ac += a.bonus;
+        }
+        return tot + ac;
+      }, 0);
     },
     methods: {
       setRollInit: function(diff) {
@@ -299,11 +306,9 @@
           left: -45px;
         }
         
-        // &:focus {
-        //   outline: none;
-        //   line-height: 36px;
-        //   border: 3px solid $c-prim;
-        // }
+        &:focus {
+          background: $c-prim;
+        }
       }
     }
 
@@ -592,14 +597,9 @@
             background: none;
             border: none;
             
-            // &:focus {
-            //   outline: none;
-            //   top: 52px;
-              
-            //   span {
-            //     border: 3px solid $c-prim;
-            //   }
-            // }
+            &:focus {
+              background: $c-prim;
+            }
             
             span {
               display: inline-block;

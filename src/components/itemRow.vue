@@ -16,7 +16,12 @@
       {{ item.ac ? 'AC ' + item.ac : '' }}
       {{ item.level === 0 ? 'Cantrip' : '' }}
       {{ item.level > 0 ? 'Lvl '+ item.level : '' }}
-      <span v-if="item.prof" class="prof-bonus"> +{{ prof }} </span>
+      <span
+        v-if="item.bonus || (item.prof && item.type === 'Weapon')"
+        class="prof-bonus"
+      >
+        +{{ item.bonus || prof }}
+      </span>
     </p>
     <div class="i-container">
       <i

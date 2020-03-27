@@ -79,7 +79,10 @@
                   </span>
                 </li>
                 <li v-if="info.ac">
-                  AC {{ info.ac }}
+                  AC {{ info.ac }}{{ info.dex_bonus ? ' + Dex' : '' }}
+                  <span v-if="info.max_dex">
+                    (max bonus {{ info.max_dex }})
+                  </span>
                 </li>
                 <li v-if="info.str_minimum"> Min Str {{ info.str_minimum }} </li>
                 <li v-if="info.stelth_disadvantage"> Stealth Disadvantage </li>
@@ -306,6 +309,10 @@
               newItem.attack = item.damage.damage_dice + ' ' + item.damage.damage_type.name;
             } else if (item.armor_class) {
               newItem.ac = item.armor_class.base;
+              newItem.dex_bonus = item.armor_class.dex_bonus;
+              if (item.armor_class.max_bonus) {
+                newItem.max_dex = item.armor_class.max_bonus;
+              }
             } else {
               newItem.quantity = parseInt(quantity);
             }
@@ -313,6 +320,7 @@
             newItem.prep = false;
             newItem.level = item.level;
           }
+          console.log(newItem);
           UserData.setItem(this.type, newItem);
         }
       }
