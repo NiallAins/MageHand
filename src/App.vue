@@ -1,13 +1,12 @@
 <template>
-  <div>
+  <div id="page_main" :class="{ 'in-app': !inBrowser }">
     <div class="install-prompt">
       <h1> Mage Hand </h1>
       <img src="./assets/icon-image.png" />
       Character sheet and stats tracker for D&D 5th Edition
       <br/><br/>
-      Mage Hand is designed to run as a native app on mobile, click below to download
-      <br/>
       <button @click="showPrompt()"> Install Mage Hand </button>
+      <p @click="inBrowser = true"> Or run in-browser... </p>
     </div>
     <main>
       <Prof v-if="currentView === 'prof'" :navOpen="navOpen"></Prof>
@@ -72,6 +71,7 @@
           :class="['nav-item', name]"
           @mouseup="currentView = name; navOpen = false"
           @touchend="currentView = name; navOpen = false; $event.preventDefault();"
+          tabindex="0"
         >
           <i :class="'icon-' + name"></i>
         </div>
@@ -85,6 +85,7 @@
         <div
           class="help-icon"
           @click="showHelp = true; navOpen = false;"
+          tabindex="0"
         > ? </div>
       </nav>
       <div
@@ -117,6 +118,7 @@
         currentView: 'prof',
         showHelp: false,
         navOpen: false,
+        inBrowser: false,
         navItems: {
           'prof': 'Profile',
           'sear': 'Search',
@@ -151,17 +153,23 @@
   
   $w-nav-item: 64px;
 
-  // @media (max-width: $w-max) and (display-mode: browser) {
-  //   main {
-  //     display: none;
-  //   }
-  // }
-
-  // @media (min-width: $w-max), (display-mode: standalone), (display-mode: fullscreen) {
-    .install-prompt {
-      display: none;
+  #page_main.in-app {
+    @media (max-width: $w-max) and (display-mode: browser) {
+      main {
+        display: none;
+      }
     }
-  // }
+
+    @media (min-width: $w-max), (display-mode: standalone), (display-mode: fullscreen) {
+      .install-prompt {
+        display: none;
+      }
+    }
+  }
+
+  #page_main:not(.in-app) .install-prompt {
+    display: none;
+  }
 
   .install-prompt {
     position: fixed;
@@ -174,7 +182,7 @@
     img {
       display: block;
       margin: 0 auto 10px;
-      width: 100%;
+      width: 80%;
     }
 
     button {
@@ -183,6 +191,10 @@
       padding: 10px 20px;
       margin-top: 30px;
       font-size: 20px;
+    }
+
+    p {
+      text-decoration: underline;
     }
   }
 
@@ -228,12 +240,12 @@
     }
 
     header {
-      padding: 20px 0 10px;
+      padding: 20px 0 5px;
 
       h1, p {
         text-align: center;
-        line-height: 1.2;
-        padding-bottom: 5px;
+        line-height: 20px;
+        padding-bottom: 10px;
       }
     }
 
@@ -284,7 +296,8 @@
 
     p {
       margin: 0;
-      line-height: 1.3;
+      font-size: 14px;
+      line-height: 20px;
     }
   }
 
@@ -394,6 +407,11 @@
         pointer-events: all;
         transition: opacity #{$l-ani-mod - 0.05} ease 0.05s;
         animation: pause-pointer-events $l-ani-mod 1;
+
+        &:focus,
+        &:active {
+          outline: none;
+        }
       }
 
       .help-icon {
@@ -403,6 +421,11 @@
           top $l-ani-mod,
           opacity $l-ani-mod;
         animation: pause-pointer-events $l-ani-mod 1;
+
+        &:focus,
+        &:active i {
+          outline: none;
+        }
       }
     }
 

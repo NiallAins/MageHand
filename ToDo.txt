@@ -1,13 +1,5 @@
-GEN
-stop touch highlight on all elements (stats page)
-Allow mobile in-browser
-Standarise button focus/active
-
-STATS
-Fix stats skills layout
-
 COMB
-persist initiative roll
+spell slot integration
 
 SEAR
 Push scroll container above add custom button
@@ -18,9 +10,4 @@ fix item info scroll container on mobile
 add class features to features
 
 ITEMROW
-prevent quantity overflow
 spell lvl in search
-full width combat features
-
-TEXTBOX
-Textbox click area bug

@@ -22,9 +22,7 @@
       </div>
     </div>
 
-    <div class="skill-edit-text">
-      Tap skills to toggle proficiency:
-    </div>
+    <div class="skill-edit-text"> Tap to toggle proficiency: </div>
 
     <div class="skill-list">
       <div
@@ -233,7 +231,8 @@
       border: 1px solid $c-border;
       border-radius: 100%;
       width: 30px;
-      line-height: 30px;
+      height: 30px;
+      line-height: 28px;
       font-size: 20px;
       background: $c-bg;
       
@@ -242,6 +241,11 @@
       }
       &:nth-child(2) {
         right: -15px;
+      }
+
+      &:active {
+        border: 2px solid $c-prim;
+        line-height: 26px;
       }
     }
 
@@ -265,6 +269,10 @@
 
       .touch-button {
         top: 40px;
+        
+        &:active {
+          line-height: 27px;
+        }
       }
     }
     
@@ -377,8 +385,10 @@
 
   .skill-edit-text {
     clear: both;
-    padding-left: 10px;
+    max-width: 400px;
     height: 0;
+    padding-left: 10px;
+    margin: 0 auto;
     overflow: hidden;
     transition:
       height $l-ani-reveal-slow,
@@ -386,6 +396,7 @@
   }
 
   .skill-list {
+    max-width: 390px;
     margin: 0 auto;
     
     &>div {

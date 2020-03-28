@@ -120,6 +120,12 @@
       border-radius: $br-el;
       margin-top: 5px;
       line-height: 38px;
+
+      &:active {
+        border: 2px solid $c-prim;
+        padding: 0 19px;
+        line-height: 36px;
+      }
     }
   }
 
@@ -227,6 +233,11 @@
         border: 1px solid $c-border;
         border-radius: $br-el;
         margin: 10px;
+
+        &:active {
+          border: 2px solid $c-prim;
+          padding: 9px 29px;
+        }
       }
     }
     

@@ -1,6 +1,10 @@
 @import 'vars.scss';
 @import 'icons.scss';
 
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
 body {
   min-width: $w-min;
   max-width: $w-max;
@@ -65,7 +69,6 @@ body {
     background: none;
     font-family: $f-prim;
     cursor: pointer;
-    -webkit-tap-highlight-color: transparent;
 
     &:focus {
       outline: none;

@@ -189,6 +189,7 @@
     },
     created: function() {
       this.userData = UserData.data;
+      this.rollInit = this.userData.init;
       this.baseInit = Math.floor((this.userData.stats[1] - 10) / 2);
 
       this.equipData.spells = this.userData.spells.filter(s => s.prep);
@@ -214,6 +215,7 @@
         } else if (this.rollInit < 1) {
           this.rollInit += 20;
         }
+        UserData.set('init', this.rollInit);
       },
       setSpellSlot: function(level, increment, setAvailable = false) {
         let editType = setAvailable ? 0 : 1,
@@ -301,13 +303,23 @@
         
         &:nth-last-child(1) {
           right: -45px;
+
+          &:active {
+            right: -46px;
+          }
         }
         &:nth-last-child(2) {
           left: -45px;
+
+          &:active {
+            left: -46px;
+          }
         }
         
-        &:focus {
-          background: $c-prim;
+        &:active {
+          top: 19px;
+          width: 42px;
+          border: 2px solid $c-prim;
         }
       }
     }
@@ -419,6 +431,12 @@
           line-height: 38px;
           border: 1px solid $c-border;
           border-radius: $br-el;
+
+          &:active {
+            border: 2px solid $c-prim;
+            line-height: 35px;
+            padding: 0 15px;
+          }
         }
 
         .toggle-edit {
@@ -488,6 +506,13 @@
                 pointer-events: none;
                 opacity: 0.4;
               }
+
+              &:active {
+                border: 2px solid $c-prim;
+                width: 30px;
+                height: 30px;
+                line-height: 27px;
+              }
             }
           }
           &:first-child {
@@ -553,6 +578,11 @@
         border-radius: $br-el;
         background: $c-bg;
         font-size: $f-size-md;
+
+        &:active {
+          border: 2px solid $c-prim;
+          padding: 7px;
+        }
       }
     }
 
@@ -597,10 +627,6 @@
             background: none;
             border: none;
             
-            &:focus {
-              background: $c-prim;
-            }
-            
             span {
               display: inline-block;
               pointer-events: none;
@@ -611,6 +637,13 @@
               font-size: 20px;
               background: $c-bg;
               border: 1px solid $c-border;
+            }
+
+            &:active span {
+              border: 2px solid $c-prim;
+              width: 32px;
+              height: 31px;
+              line-height: 32px;
             }
             
             &:nth-last-child(1) {
@@ -690,6 +723,13 @@
 
       .item-row {
         margin-right: 10px;
+
+        i.icon-dec:active:before {
+          border-top-color: $c-prim;
+        }
+        i.icon-inc:active:before {
+          border-bottom-color: $c-prim;
+        }
       }
     }
 

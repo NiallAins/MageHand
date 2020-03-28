@@ -190,8 +190,9 @@
             </div>
             <input
               type="number"
+              v-if="customObject.dex_bonus"
               v-model="customObject.max_dex"
-              placeholder="Max Bonus..."
+              placeholder="Max Bonus ?"
             />
           </div>
         </div>
@@ -368,7 +369,7 @@
           }
         } else if (this.listType === 'spells') {
           newItem.prep = false;
-          newItem.level = this.customObject.spell_level;
+          newItem.level = this.customObject.spell_level === 'Cantrip' ? 0 : this.customObject.spell_level.replace('Level ', '');
         }
         UserData.setItem(this.listType, newItem);
         this.closeCustomModal();
@@ -485,6 +486,11 @@
         border-radius: $br-el;
         background: $c-bg;
         font-size: $f-size-md;
+        
+        &:active {
+          padding: 7px;
+          border: 2px solid $c-prim;
+        }
       }
     }
 
@@ -605,15 +611,18 @@
         top: $w-pad;
       }
 
-      input:focus,
-      .textbox.focus {
+      input:focus {
         outline: 2px solid $c-prim;
       }
 
       .textbox {
-        min-height: 80px;
-        margin-top: 30px;
         clear: both;
+        margin-top: 30px;
+
+        &.focus {
+          outline: 2px solid $c-prim;
+          outline-offset: -3px;
+        }
       }
 
       input,
@@ -695,6 +704,7 @@
             position: relative;
             top: 1px;
             padding: 0 38px 0 10px;
+            user-select: none;
 
             &:before {
               content: '';
@@ -723,7 +733,7 @@
           }
 
           input:checked+label:after {
-              background: $c-border;
+              background: $c-prim;
           }
         }
       }
@@ -743,6 +753,11 @@
           border: 1px solid $c-border;
           border-radius: $br-el;
           font-size: 16px;
+
+          &:active {
+            padding: 7px 9px;
+            border: 2px solid $c-prim;
+          }
         }
       }
     }
@@ -773,6 +788,13 @@
 
       .item-row {
         width: calc(100% + 10px);
+
+        i.icon-dec:active:before {
+          border-top-color: $c-prim;
+        }
+        i.icon-inc:active:before {
+          border-bottom-color: $c-prim;
+        }
       }
     }
   }

@@ -30,7 +30,7 @@
 </script>
 
 <style scoped lang="scss">
-  @import '../vars.scss';
-
-  
+  .input {
+    min-height: 45px;
+  }
 </style>

@@ -2,13 +2,15 @@
   <div class="item-row">
     <i class="icon-more" @click="$emit('moreclick', item.index)"></i>
     <h4 :class="{
-      'sm-width': item.ac || item.attack || item.quantity || item.quantity === 0,
-      'md-width': typeof item.level !== 'undefined',
+      'sm-width': item.ac || item.attack || typeof item.quantity !== 'undefined' || (editmode && typeof item.level !== 'undefined'),
+      'md-width': !editmode &&  typeof item.level !== 'undefined',
       'disable': item.quantity === 0
     }">
-      <span class="name">{{ item.index.replace(/-/g, ' ') }}</span>
-      <span class="quantity" v-if="item.quantity > 1">
-        <span class="times"> &times;</span>{{ item.quantity }}
+      <span :class="['name', { 'quantity-space': item.quantity > 1 }]">
+        {{ item.index.replace(/-/g, ' ') }}
+        <span class="quantity" v-if="item.quantity > 1">
+          <span class="times"> &times;</span>{{ item.quantity }}
+        </span>
       </span>
     </h4>
     <p v-if="!editmode && (item.attack || item.ac || item.ammo || typeof item.level !== 'undefined')">
@@ -33,6 +35,9 @@
         v-if="editmode && (item.level || item.level === 0)"
         @click="$emit('togglePrep', item.index)"
       ></i>
+      <span class="spell-level" v-if="editmode && typeof item.level !== 'undefined'">
+        {{ item.level ? 'Lvl ' + item.level : 'Cant.' }}
+      </span>
       <i
         :class="['icon-equip xs', { 'active': item.equip }]"
         v-if="editmode && (item.ac || item.attack)"
@@ -46,6 +51,7 @@
       <i
         class="icon-inc xs"
         v-if="item.quantity || item.quantity === 0"
+        tabindex="0"
         @click="$emit('changeQuantity', 1)"
         @mousedown="setTouchTimer()"
         @mouseup="stopTouchTimer()"
@@ -56,6 +62,7 @@
       <i
         :class="['icon-dec xs', { 'disable': item.quantity === 0 || (item.quantity === 1 && !zeroQuantity)}]"
         v-if="item.quantity || item.quantity === 0"
+        tabindex="0"
         @click="$emit('changeQuantity', -1)"
         @mousedown="setTouchTimer()"
         @mouseup="stopTouchTimer()"
@@ -116,6 +123,7 @@
 
     h4 {
       width: calc(100% - 100px);
+      height: 48px;
 
       &.sm-width {
         width: calc(100% - 185px);
@@ -129,11 +137,26 @@
         }
       }
 
+      .name.quantity-space {
+        position: relative;
+        display: inline-block;
+        max-width: calc(100% - 36px);
+        padding-right: 38px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+
+        .quantity {
+          position: absolute;
+          top: 12px;
+          right: 0px;
+        }
+      }
+
       &.disable {
         opacity: 0.5;
         text-indent: 5px;
 
-        .name{
+        .name {
           position: relative;
           &:after {
             content: '';
@@ -170,6 +193,11 @@
       &.active {
         background: $c-sear;
       }
+
+      &.icon-dec:focus,
+      &.icon-inc:focus {
+        outline: none;
+      }
     }
 
     .i-container {
@@ -183,6 +211,14 @@
           opacity: 0.5;
           pointer-events: none;
         }
+      }
+
+      .spell-level {
+        display: inline-block;
+        width: 43px;
+        line-height: 48px;
+        text-align: center;
+        font-size: 13px;
       }
     }
 

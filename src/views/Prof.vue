@@ -245,7 +245,7 @@
       .touch-button {
         position: absolute;
         top: 25px;
-        border: 1px solid $c-font;
+        border: 1px solid $c-bg;
         border-radius: 100%;
         width: 30px;
         line-height: 28px;
@@ -258,6 +258,12 @@
         }
         &:nth-child(2) {
           right: -9px;
+        }
+
+        &:focus {
+          top: 26px;
+          border: 2px solid $c-font;
+          line-height: 26px;
         }
       }
       
@@ -295,6 +301,11 @@
       clear: both;
       margin: 7px 0;
       min-height: 4em;
+      
+      &.focus {
+        outline: 2px solid $c-prim;
+        outline-offset: -3px;
+      }
     }
 
     input {
