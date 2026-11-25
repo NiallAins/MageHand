@@ -23,7 +23,7 @@
     "last 2 versions"
   ],
   "vue": {
-    "publicPath": "/MageHand/dist/",
+    "publicPath": "/dist/",
     "pwa": {
       "manifestOptions": {
         "name": "Mage Hand",
